@@ -16,6 +16,7 @@
 - native 언어를 배워야 할까?
 - 시간과 다른 여견을 보았을 때, 크로스 플랫폼 언어를 선택
 - 크로스 플랫폼 언어 중 무엇을 선택? Flutter vs React Native
+- 우선 nuxt3로 모바일 뷰 개발 -> swingtoapp 서비스로 모바일 앱화 -> 추후에 크로스 플랫폼 언어 학습 후 전환
 - 백엔드는 Spring, MySQL
 - 인프라 : AWS 배포, 가능하면 jenkins 등으로 무중단 배포까지
 - 프론트엔드는 cloudType vs githubPage vs netlify
