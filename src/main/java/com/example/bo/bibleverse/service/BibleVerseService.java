@@ -1,6 +1,5 @@
 package com.example.bo.bibleverse.service;
 
-import com.example.bo.bibleverse.dto.BibleInfoDto;
 import com.example.bo.bibleverse.dto.BibleVerseDto;
 import com.example.bo.bibleverse.entity.BibleVerseEntity;
 import com.example.bo.bibleverse.repository.BibleVerseRepository;
