@@ -1,17 +1,15 @@
 package com.example.bo.bibleverse.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BibleVerseDto {
-    private int bookSeq;
-    private int chapterSeq;
-    private int verseSeq;
+    private int book;
+    private int chapter;
+    private Integer verse;
     private String content;
 }

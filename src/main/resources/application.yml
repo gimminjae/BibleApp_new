@@ -13,7 +13,10 @@ spring:
     password: ${DB_PW}
   jpa:
     hibernate:
-      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: update # not create or create-drop!!!!
+    show-sql: true
 # mapping DB table's column name and DTO's name
 mybatis:
   configuration:
