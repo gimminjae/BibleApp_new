@@ -19,6 +19,7 @@ public class BibleVerseEntity {
     private int chapter;
     @Id
     private int verse;
+    private String bookName;
     @Column(columnDefinition = "TEXT")
     private String content;
 
