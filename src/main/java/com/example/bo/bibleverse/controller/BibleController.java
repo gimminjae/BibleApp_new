@@ -1,8 +1,7 @@
 package com.example.bo.bibleverse.controller;
 
 import com.example.bo.bibleverse.dto.BibleVerseDto;
-import com.example.bo.bibleverse.service.BibleVerseService;
-import lombok.Getter;
+import com.example.bo.bibleverse.service.BibleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,8 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/bibleverse")
 @Slf4j
-public class BibleVerseController {
-    private final BibleVerseService bibleVerseService;
+public class BibleController {
+    private final BibleService bibleVerseService;
     @GetMapping("")
     public ResponseEntity<List<BibleVerseDto>> getBibleVerse(@ModelAttribute BibleVerseDto bibleVerseDto) {
 

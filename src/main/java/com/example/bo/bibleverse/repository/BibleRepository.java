@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BibleVerseRepository extends JpaRepository<BibleVerseEntity, Integer> {
+public interface BibleRepository extends JpaRepository<BibleVerseEntity, Integer> {
     List<BibleVerseEntity> findByBookAndChapter(int book, int chapter);
 }
