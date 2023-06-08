@@ -1,11 +1,6 @@
 spring:
   profiles:
-    active:
-  devtools:
-    livereload:
-      enabled: true
-    restart:
-      enabled: true
+    active: ${RUN_TYPE}
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
@@ -16,7 +11,6 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       ddl-auto: update # not create or create-drop!!!!
-    show-sql: true
 # mapping DB table's column name and DTO's name
 mybatis:
   configuration:
