@@ -16,4 +16,8 @@ public class BibleService {
     public List<BibleVerseDto> getByBookAndChapter(BibleVerseDto bibleVerseDto) {
         return bibleVerseRepository.findByBookAndChapter(bibleVerseDto.getBook(), bibleVerseDto.getChapter()).stream().map(BibleVerseEntity::toDto).toList();
     }
+
+    public List<BibleVerseDto> getByBookNameAndChapter(BibleVerseDto bibleVerseDto) {
+        return bibleVerseRepository.findByBookNameAndChapter(bibleVerseDto.getBookName(), bibleVerseDto.getChapter()).stream().map(BibleVerseEntity::toDto).toList();
+    }
 }

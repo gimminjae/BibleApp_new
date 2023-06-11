@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 public class BibleVerseDto {
     private int book;
+    private String bookName;
     private int chapter;
     private Integer verse;
     private String content;

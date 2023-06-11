@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface BibleRepository extends JpaRepository<BibleVerseEntity, Integer> {
     List<BibleVerseEntity> findByBookAndChapter(int book, int chapter);
+    List<BibleVerseEntity> findByBookNameAndChapter(String bookName, int chapter);
 }

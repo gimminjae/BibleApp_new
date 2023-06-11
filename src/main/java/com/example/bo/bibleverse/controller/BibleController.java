@@ -23,4 +23,11 @@ public class BibleController {
         log.debug(result.toString());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+    @GetMapping("/type1")
+    public ResponseEntity<List<BibleVerseDto>> getBibleVerseType1(@ModelAttribute BibleVerseDto bibleVerseDto) {
+
+        List<BibleVerseDto> result = bibleVerseService.getByBookNameAndChapter(bibleVerseDto);
+        log.debug(result.toString());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }
