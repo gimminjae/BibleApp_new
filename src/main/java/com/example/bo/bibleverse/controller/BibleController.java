@@ -23,8 +23,16 @@ public class BibleController {
         log.debug(result.toString());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-    @GetMapping("/type1")
+    @GetMapping("/input")
     public ResponseEntity<List<BibleVerseDto>> getBibleVerseType1(@ModelAttribute BibleVerseDto bibleVerseDto) {
+
+        List<BibleVerseDto> result = bibleVerseService.getByBookNameAndChapter(bibleVerseDto);
+        log.debug(result.toString());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+    @GetMapping("/inputString")
+    public ResponseEntity<List<BibleVerseDto>> getBibleVerseType3(@RequestParam String bibleSearchString) {
+        BibleVerseDto bibleVerseDto = BibleVerseDto.fromString(bibleSearchString);
 
         List<BibleVerseDto> result = bibleVerseService.getByBookNameAndChapter(bibleVerseDto);
         log.debug(result.toString());

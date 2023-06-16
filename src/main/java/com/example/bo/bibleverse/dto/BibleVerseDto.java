@@ -13,4 +13,12 @@ public class BibleVerseDto {
     private int chapter;
     private Integer verse;
     private String content;
+
+    public static BibleVerseDto fromString(String searchString) {
+        String[] searchArr = searchString.split(" ");
+        return BibleVerseDto.builder()
+                .bookName(searchArr[0])
+                .chapter(searchArr.length > 1 ? Integer.parseInt(searchArr[1]) : 1)
+                .build();
+    }
 }

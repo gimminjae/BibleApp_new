@@ -26,6 +26,7 @@ public class BibleVerseEntity {
     public BibleVerseDto toDto() {
         return BibleVerseDto.builder()
                 .book(this.getBook())
+                .bookName(this.getBookName())
                 .chapter(this.getChapter())
                 .verse(this.getVerse())
                 .content(this.getContent())
