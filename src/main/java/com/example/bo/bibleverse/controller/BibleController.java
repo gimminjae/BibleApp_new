@@ -16,18 +16,15 @@ import java.util.List;
 @Slf4j
 public class BibleController {
     private final BibleService bibleVerseService;
-    @GetMapping("")
-    public ResponseEntity<List<BibleVerseDto>> getBibleVerse(@ModelAttribute BibleVerseDto bibleVerseDto) {
 
-        List<BibleVerseDto> result = bibleVerseService.getByBookAndChapter(bibleVerseDto);
-        log.debug(result.toString());
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
     @GetMapping("/input")
     public ResponseEntity<List<BibleVerseDto>> getBibleVerseType1(@ModelAttribute BibleVerseDto bibleVerseDto) {
-
         List<BibleVerseDto> result = bibleVerseService.getByBookNameAndChapter(bibleVerseDto);
-        log.debug(result.toString());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+    @GetMapping("/select")
+    public ResponseEntity<List<BibleVerseDto>> getBibleVerseType2(@ModelAttribute BibleVerseDto bibleVerseDto) {
+        List<BibleVerseDto> result = bibleVerseService.getByBookAndChapter(bibleVerseDto);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
     @GetMapping("/inputString")
@@ -35,7 +32,7 @@ public class BibleController {
         BibleVerseDto bibleVerseDto = BibleVerseDto.fromString(bibleSearchString);
 
         List<BibleVerseDto> result = bibleVerseService.getByBookNameAndChapter(bibleVerseDto);
-        log.debug(result.toString());
+        
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
