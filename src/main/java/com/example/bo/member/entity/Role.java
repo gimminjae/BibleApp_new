@@ -1,6 +1,7 @@
 package com.example.bo.member.entity;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public enum Role {

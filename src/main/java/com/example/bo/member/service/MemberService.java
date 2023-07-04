@@ -12,7 +12,7 @@ public interface MemberService {
 
     void modifyEmail(MemberDto memberDto, String email);
 
-    void changePassword(MemberDto savedMemberDto, String newPassword);
+    void changePassword(MemberDto savedMemberDto, String oldPassword, String newPassword);
 
     List<MemberDto> getAllMember();
 

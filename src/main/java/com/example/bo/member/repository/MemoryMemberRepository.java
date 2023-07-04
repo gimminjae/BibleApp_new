@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 
+import com.example.bo.base.util.ObjectUtil;
 import com.example.bo.member.entity.Member;
 
 public class MemoryMemberRepository implements MemberRepository {
@@ -90,8 +91,7 @@ public class MemoryMemberRepository implements MemberRepository {
 
     @Override
     public List<Member> findAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        return memberList;
     }
 
     @Override
@@ -102,14 +102,22 @@ public class MemoryMemberRepository implements MemberRepository {
 
     @Override
     public <S extends Member> S save(S entity) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+        Member member = null;
+        try {
+            member = ObjectUtil.isNullExceptionElseReturnObJect(memberList.stream().filter(data -> data.getMemId().equals(entity.getMemId())).findFirst());
+        } catch(Exception e) {
+
+        }
+        if(member != null) {
+            memberList.remove(member);
+        }
+        memberList.add(entity);
+        return entity;
     }
 
     @Override
     public Optional<Member> findById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return memberList.stream().filter(member -> member.getMemId().equals(id)).findFirst();
     }
 
     @Override
@@ -126,8 +134,13 @@ public class MemoryMemberRepository implements MemberRepository {
 
     @Override
     public void deleteById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+        Member deletedMember = null;
+        for(Member member : memberList) {
+            if(member.getMemId().equals(id)) deletedMember = member;
+        }
+        if(deletedMember != null) {
+            memberList.remove(deletedMember);
+        }
     }
 
     @Override
@@ -199,5 +212,9 @@ public class MemoryMemberRepository implements MemberRepository {
     public void clear() {
         memberList.clear();
     }
-    
+
+    @Override
+    public Optional<Member> findByUsername(String username) {
+        return memberList.stream().filter(member -> member.getUsername().equals(username)).findFirst();
+    }
 }

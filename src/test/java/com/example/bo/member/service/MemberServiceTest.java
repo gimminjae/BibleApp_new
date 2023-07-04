@@ -9,17 +9,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.bo.member.dto.MemberDto;
 import com.example.bo.member.repository.MemoryMemberRepository;
 
 public class MemberServiceTest {
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     MemberDto member;
     private MemoryMemberRepository memberRepository = new MemoryMemberRepository();
-    private MemberService memberService = new MemberServiceImpl(memberRepository);
+    private MemberService memberService = new MemberServiceImpl(passwordEncoder, memberRepository);
     
     @BeforeEach
     void beforeEach() {
@@ -63,7 +63,7 @@ public class MemberServiceTest {
         //then
         MemberDto modifiedMemberDto = memberService.getByUsername(memberDto.getUsername());
         assertThat(modifiedMemberDto.getMemId()).isEqualTo(savedMemberDto.getMemId());
-        assertThat(modifiedMemberDto.getEmail()).isEqualTo(savedMemberDto.getEmail());
+        assertThat(modifiedMemberDto.getEmail()).isEqualTo(email);
     }
     @Test
     @DisplayName("change password")
@@ -74,14 +74,15 @@ public class MemberServiceTest {
         MemberDto savedMemberDto = memberService.getByUsername(memberDto.getUsername());
 
         String newPassword = "modifypassword123!";
+        String oldPassword = "password1234!";
 
         //when
-        memberService.changePassword(savedMemberDto, newPassword);
+        memberService.changePassword(savedMemberDto, oldPassword, newPassword);
 
         //then
         MemberDto modifiedMemberDto = memberService.getByUsername(memberDto.getUsername());
         assertThat(modifiedMemberDto.getMemId()).isEqualTo(savedMemberDto.getMemId());
-        assertThat(passwordEncoder.matches(modifiedMemberDto.getPassword(), newPassword)).isTrue();
+        assertThat(passwordEncoder.matches(newPassword, modifiedMemberDto.getPassword())).isTrue();
     }
     @Test
     @DisplayName("delete member")
@@ -94,6 +95,7 @@ public class MemberServiceTest {
         assertThat(allMembers.size()).isEqualTo(1);
 
         //when
+        memberDto = memberService.getByUsername(memberDto.getUsername());
         memberService.deleteMember(memberDto);
         
         //then

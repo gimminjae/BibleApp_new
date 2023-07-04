@@ -15,7 +15,7 @@ public class MemberDto {
     private String password;
     private String nickname;
     private String email;
-    private Role role;
+    private String role;
 
     public static MemberDto makeMemberDto(String username, String password, String nickname, String email) {
         return MemberDto.builder()
