@@ -1,5 +1,9 @@
 package com.example.bo.member.repository;
 
-public interface MemberRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.bo.member.entity.Member;
+
+public interface MemberRepository extends JpaRepository<Member, String> {
     
 }

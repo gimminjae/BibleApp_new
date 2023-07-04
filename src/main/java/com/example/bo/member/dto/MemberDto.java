@@ -2,16 +2,12 @@ package com.example.bo.member.dto;
 
 import javax.management.relation.Role;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class MemberDto {
     private String memId;
@@ -20,4 +16,13 @@ public class MemberDto {
     private String nickname;
     private String email;
     private Role role;
+
+    public static MemberDto makeMemberDto(String username, String password, String nickname, String email) {
+        return MemberDto.builder()
+                .username(username)
+                .password(password)
+                .nickname(nickname)
+                .email(email)
+                .build();
+    }
 }
