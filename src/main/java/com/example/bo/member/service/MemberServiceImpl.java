@@ -3,6 +3,7 @@ package com.example.bo.member.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,12 +25,15 @@ public class MemberServiceImpl implements MemberService {
     public void signUp(MemberDto memberDto) {
         memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));
         Member member = Member.from(memberDto);
-        memberRepository.save(member);
+        try {
+            memberRepository.save(member);
+        } catch(DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("중복된 정보입니다.");
+        }
     }
 
     @Override
     public MemberDto getByUsername(String username) {
-        
         return ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByUsername(username)).toDto();
     }
 
