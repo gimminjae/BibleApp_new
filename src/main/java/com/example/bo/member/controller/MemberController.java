@@ -34,16 +34,15 @@ public class MemberController {
         return new ResponseEntity<>(tokensInfo, HttpStatus.OK);
     }
 
-    //    @DeleteMapping("/logout")
-//    public ResponseEntity<Void> logout(@AuthenticationPrincipal MemberContext memberContext) {
-//        memberService.deleteRefreshToken(memberContext.getUserId());
-//
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-//    @GetMapping("/regenAccessToken")
-//    public ResponseEntity<String> regenToken(@RequestParam String refreshToken) {
-//        return new ResponseEntity<>(memberService.regenAccessToken(refreshToken), HttpStatus.OK);
-//    }
+    @DeleteMapping("/logout")
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal AuthUser authUser) {
+        memberService.logout(authUser.getMemId());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/regenAccessToken")
+    public ResponseEntity<String> regenToken(@RequestParam String refreshToken) {
+        return new ResponseEntity<>(memberService.regenAccessToken(refreshToken), HttpStatus.OK);
+    }
 
     @GetMapping("/me")
     public ResponseEntity<Map<String, Object>> me(@AuthenticationPrincipal AuthUser authUser) {

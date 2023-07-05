@@ -21,7 +21,7 @@ public class MemberServiceTest {
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     MemberDto member;
     private MemoryMemberRepository memberRepository = new MemoryMemberRepository();
-    private MemberService memberService = new MemberServiceImpl(null, passwordEncoder, memberRepository);
+    private MemberService memberService = new MemberServiceImpl(null, null, passwordEncoder, memberRepository);
     
     @BeforeEach
     void beforeEach() {

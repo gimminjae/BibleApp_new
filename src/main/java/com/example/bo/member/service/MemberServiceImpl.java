@@ -1,9 +1,14 @@
 package com.example.bo.member.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.example.bo.base.jwt.provider.JwtProvider;
+import com.example.bo.member.refresh.entity.RefreshToken;
+import com.example.bo.member.refresh.repository.RefreshTokenRedisRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +30,10 @@ public class MemberServiceImpl implements MemberService {
     private final static String NICKNAME_DUPLICATION_MSG = "중복된 닉네임입니다.";
     private final static String USERNAME_DUPLICATION_MSG = "중복된 아이디입니다.";
     private final static String EMAIL_DUPLICATION_MSG = "중복된 이메일입니다.";
-    private final static String TWO_NEW_PASSWORD_NOT_CORRECT = "두 개의 새 비밀번호가 일치하지 않습니다.";
+    private final static String TWO_NEW_PASSWORD_NOT_CORRECT_MSG = "두 개의 새 비밀번호가 일치하지 않습니다.";
+    private final static String INVALID_REQUEST_MSG = "유효하지 않은 요청입니다.";
+    private final static String EXPIRE_RELOGIN_MSG = "기간 만료 : 재로그인해주세요.";
+    private final RefreshTokenRedisRepository refreshTokenRedisRepository;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
@@ -60,7 +68,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void changePassword(MemberDto memberDto, String oldPassword, String newPassword1, String newPassword2) {
         if(!newPassword1.equals(newPassword2)) {
-            throw new IllegalArgumentException(TWO_NEW_PASSWORD_NOT_CORRECT);
+            throw new IllegalArgumentException(TWO_NEW_PASSWORD_NOT_CORRECT_MSG);
         }
         Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(memberDto.getMemId()));
         if(passwordEncoder.matches(oldPassword, memberDto.getPassword())) {
@@ -109,16 +117,61 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private Map<String, String> generateTokens(Member member) {
-        return Map.of("accessToken", genAccessToken(member), "refreshToken", "");
+        return Map.of("accessToken", genAccessToken(member), "refreshToken", genRefreshToken(member));
     }
+
 
     @Override
     public MemberDto getByMemId(String memId) {
         return ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(memId)).toDto();
     }
 
+    @Override
+    public void logout(String memId) {
+        deleteRefreshToken(memId);
+    }
+
+    @Override
+    public String regenAccessToken(String refreshToken) {
+        return regenAccessTokenWithRefreshToken(refreshToken);
+    }
+
     private String genAccessToken(Member member) {
         return jwtProvider.generateAccessToken(member.getAccessTokenClaims(), ACCESS_TOKEN_MAXAGE);
+    }
+
+    private String genRefreshToken(Member member) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(member.getCreateDateTime().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
+        sb.append(member.getMemId());
+        sb.append(UUID.randomUUID());
+
+        try {
+            RefreshToken refreshToken = ObjectUtil.isNullExceptionElseReturnObJect(refreshTokenRedisRepository.findById(member.getMemId()));
+            refreshToken.update(LocalDateTime.now().plusMonths(1), sb.toString());
+            refreshTokenRedisRepository.save(refreshToken);
+        } catch (NullPointerException e) {
+            return refreshTokenRedisRepository.save(RefreshToken.from(member.getMemId(), sb.toString())).getRefreshToken();
+        }
+        return sb.toString();
+    }
+
+    private String regenAccessTokenWithRefreshToken(String refreshTokenString) {
+        RefreshToken refreshToken;
+        try {
+            refreshToken = refreshTokenRedisRepository.findByRefreshToken(refreshTokenString);
+        } catch (NullPointerException e) {
+            throw new NullPointerException(INVALID_REQUEST_MSG);
+        }
+        if(LocalDateTime.now().isAfter(refreshToken.getExpiredDateTime())) {
+            throw new AccessDeniedException(EXPIRE_RELOGIN_MSG);
+        }
+        return genAccessToken(ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(refreshToken.getId())));
+    }
+
+    private void deleteRefreshToken(String memId) {
+        RefreshToken refreshToken = ObjectUtil.isNullExceptionElseReturnObJect(refreshTokenRedisRepository.findById(memId));
+        refreshTokenRedisRepository.delete(refreshToken);
     }
 
 }

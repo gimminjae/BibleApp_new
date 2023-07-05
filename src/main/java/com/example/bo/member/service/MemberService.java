@@ -26,4 +26,8 @@ public interface MemberService {
     Map<String, String> login(MemberDto memberDto);
 
     MemberDto getByMemId(String memId);
+
+    void logout(String memId);
+
+    String regenAccessToken(String refreshToken);
 }
