@@ -6,9 +6,7 @@ import java.util.UUID;
 
 import com.example.bo.member.dto.MemberDto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "member")
 public class Member {
     @Id
     private String memId;
@@ -35,6 +34,7 @@ public class Member {
     @Column(unique = true)
     private String nickname;
 
+    @Enumerated(value = EnumType.STRING)
     private Role role;
 
     @Column(unique = true)
