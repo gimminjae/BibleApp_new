@@ -66,13 +66,21 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void modifyNickname(MemberDto savedMemberDto, String email) {
-
+    public void modifyNickname(MemberDto memberDto, String nickname) {
+        Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(memberDto.getMemId()));
+        member.modifyNickname(nickname);
+        try {
+            memberRepository.save(member);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("중복된 정보입니다.");
+        }
     }
 
     @Override
-    public void empowerDEPTSUBADMIN(MemberDto savedMemberDto) {
-
+    public void empowerDEPTSUBADMIN(MemberDto memberDto) {
+        Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(memberDto.getMemId()));
+        member.empowerDEPTSUBADMIN();
+        memberRepository.save(member);
     }
 
 }

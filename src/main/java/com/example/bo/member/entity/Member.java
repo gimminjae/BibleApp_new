@@ -88,4 +88,18 @@ public class Member {
         this.password = newPassword;
     }
 
+    public void modifyNickname(String nickname) {
+        setNickname(nickname);
+    }
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void empowerDEPTSUBADMIN() {
+        setRole(Role.DEPTSUBADMIN);
+    }
 }
