@@ -43,6 +43,18 @@ class MemberRepositoryImplTest {
         assertThat(member.get().getMemId()).isEqualTo(memId);
     }
     @Test
+    @DisplayName("findById")
+    void findById() {
+        //given
+
+        //when
+        Optional<Member> member = memberRepository.findById(memId);
+
+        //then
+        assertThat(member.isPresent()).isTrue();
+        assertThat(member.get().getUsername()).isEqualTo(username);
+    }
+    @Test
     @DisplayName("modify Member's email")
     void modifyMemberEmailTest() {
         //given

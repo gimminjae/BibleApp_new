@@ -70,16 +70,17 @@ public class MemberServiceTest {
         //given
         MemberDto savedMemberDto = memberService.getByUsername(member.getUsername());
 
-        String newPassword = "modifypassword123!";
+        String newPassword1 = "modifypassword123!";
+        String newPassword2 = "modifypassword123!";
         String oldPassword = "password1234!";
 
         //when
-        memberService.changePassword(savedMemberDto, oldPassword, newPassword);
+        memberService.changePassword(savedMemberDto, oldPassword, newPassword1, newPassword2);
 
         //then
         MemberDto modifiedMemberDto = memberService.getByUsername(member.getUsername());
         assertThat(modifiedMemberDto.getMemId()).isEqualTo(savedMemberDto.getMemId());
-        assertThat(passwordEncoder.matches(newPassword, modifiedMemberDto.getPassword())).isTrue();
+        assertThat(passwordEncoder.matches(newPassword1, modifiedMemberDto.getPassword())).isTrue();
     }
     @Test
     @DisplayName("delete member")

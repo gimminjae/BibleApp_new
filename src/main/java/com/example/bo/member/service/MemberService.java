@@ -1,6 +1,7 @@
 package com.example.bo.member.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.example.bo.member.dto.MemberDto;
 
@@ -12,7 +13,7 @@ public interface MemberService {
 
     void modifyEmail(MemberDto memberDto, String email);
 
-    void changePassword(MemberDto savedMemberDto, String oldPassword, String newPassword);
+    void changePassword(MemberDto savedMemberDto, String oldPassword, String newPassword1, String newPassword2);
 
     List<MemberDto> getAllMember();
 
@@ -21,4 +22,8 @@ public interface MemberService {
     void modifyNickname(MemberDto savedMemberDto, String email);
 
     void empowerDEPTSUBADMIN(MemberDto savedMemberDto);
+
+    Map<String, String> login(MemberDto memberDto);
+
+    MemberDto getByMemId(String memId);
 }

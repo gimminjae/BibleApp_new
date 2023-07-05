@@ -1,7 +1,7 @@
 package com.example.bo.member.service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.AccessDeniedException;
@@ -18,6 +18,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
+    private final static String LOGIN_FAIL_MSG = "아이디 혹은 비밀번호를 확인하세요.";
+    private final static String NO_ACCESS_AUTH_MSG = "권한이 없습니다.";
+    private final static String NICKNAME_DUPLICATION_MSG = "중복된 닉네임입니다.";
+    private final static String USERNAME_DUPLICATION_MSG = "중복된 아이디입니다.";
+    private final static String EMAIL_DUPLICATION_MSG = "중복된 이메일입니다.";
+    private final static String TWO_NEW_PASSWORD_NOT_CORRECT = "두 개의 새 비밀번호가 일치하지 않습니다.";
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
@@ -28,7 +34,7 @@ public class MemberServiceImpl implements MemberService {
         try {
             memberRepository.save(member);
         } catch(DataIntegrityViolationException e) {
-            throw new IllegalArgumentException("중복된 정보입니다.");
+            throw new IllegalArgumentException(NICKNAME_DUPLICATION_MSG);
         }
     }
 
@@ -41,16 +47,23 @@ public class MemberServiceImpl implements MemberService {
     public void modifyEmail(MemberDto memberDto, String email) {
         Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(memberDto.getMemId()));
         member.modifyEmail(email);
-        memberRepository.save(member);
+        try {
+            memberRepository.save(member);
+        } catch(DataIntegrityViolationException e) {
+            throw new IllegalArgumentException(EMAIL_DUPLICATION_MSG);
+        }
     }
 
     @Override
-    public void changePassword(MemberDto memberDto, String oldPassword, String newPassword) {
+    public void changePassword(MemberDto memberDto, String oldPassword, String newPassword1, String newPassword2) {
+        if(!newPassword1.equals(newPassword2)) {
+            throw new IllegalArgumentException(TWO_NEW_PASSWORD_NOT_CORRECT);
+        }
         Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(memberDto.getMemId()));
         if(passwordEncoder.matches(oldPassword, memberDto.getPassword())) {
-            member.changePassword(passwordEncoder.encode(newPassword));
+            member.changePassword(passwordEncoder.encode(newPassword1));
         } else {
-            throw new AccessDeniedException("권한이 없습니다.");
+            throw new AccessDeniedException(NO_ACCESS_AUTH_MSG);
         }
         memberRepository.save(member);
     }
@@ -72,7 +85,7 @@ public class MemberServiceImpl implements MemberService {
         try {
             memberRepository.save(member);
         } catch (DataIntegrityViolationException e) {
-            throw new IllegalArgumentException("중복된 정보입니다.");
+            throw new IllegalArgumentException(NICKNAME_DUPLICATION_MSG);
         }
     }
 
@@ -81,6 +94,24 @@ public class MemberServiceImpl implements MemberService {
         Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(memberDto.getMemId()));
         member.empowerDEPTSUBADMIN();
         memberRepository.save(member);
+    }
+
+    @Override
+    public Map<String, String> login(MemberDto memberDto) {
+        Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(memberDto.getMemId()), LOGIN_FAIL_MSG);
+        if(!passwordEncoder.matches(memberDto.getPassword(), member.getPassword())) {
+            throw new AccessDeniedException(LOGIN_FAIL_MSG);
+        }
+        //member 정보로 jwt 생성
+
+        String accessToken = "";
+        String refreshToken = "";
+        return Map.of("accessToken", accessToken, "refreshToken", refreshToken);
+    }
+
+    @Override
+    public MemberDto getByMemId(String memId) {
+        return ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(memId)).toDto();
     }
 
 }

@@ -14,4 +14,12 @@ public class ObjectUtil {
         }
         return t;
     }
+    public static <T> T isNullExceptionElseReturnObJect(Optional<T> optionalT, String message) {
+        T t = optionalT.orElse(null);
+
+        if(t == null) {
+            throw new NullPointerException("message");
+        }
+        return t;
+    }
 }
