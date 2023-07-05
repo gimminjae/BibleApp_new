@@ -6,11 +6,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
 public class MemberDto {
     private String memId;
+    private LocalDateTime createDateTime;
+    private LocalDateTime updateDateTime;
     @NotNull
     @Size(min = 5, max = 10, message = "아이디는 5 ~ 10자 이어야 합니다.")
     @Pattern(regexp = "^[a-zA-Z0-0]*$", message = "아이디는 영어랑 숫자만 가능합니다.")
