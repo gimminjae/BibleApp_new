@@ -1,5 +1,6 @@
 package com.example.bo.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,11 +13,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
-@JsonIncludeProperties({"nickname", "role", "createDateTime"}) //"memId", "username"
+@JsonIncludeProperties({"nickname", "role", "createDateTime", "memId"}) //"memId", "username"
 public class AuthUser extends User {
     private final String memId;
     private final String nickname;
     private final String username;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private final LocalDateTime createDateTime;
     private String role;
     public AuthUser(String username, String password, Collection<? extends GrantedAuthority> authorities, String memId, String nickname, String username1, LocalDateTime createDateTime) {

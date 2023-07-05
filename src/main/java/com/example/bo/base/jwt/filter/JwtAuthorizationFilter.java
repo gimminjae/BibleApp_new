@@ -30,15 +30,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final MemberService memberService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = request.getHeader("access_token");
-        String refreshToken = request.getHeader("refreshToken");
+        String accessToken = request.getHeader("Authentication");
+        String refreshToken = request.getHeader("Authentication-refresh");
 
-        Cookie[] cookies = request.getCookies();
-        //jwt를 헤더에 보내면 보안 강화
-        //jwt를 쿠키에 담아서 보내면 보안은 비교적 약화되지만, 유연성 확보 가능
-
-        //access_token이 있으면 그대로 진행
-        //없으면 refreshToken으로 access_token 재발급 후 진행
         if(accessToken == null || accessToken.isEmpty()) {
             if(refreshToken != null && !refreshToken.isEmpty()) {
 //                accessToken = memberService.regenAccessToken(refreshToken);
@@ -51,8 +45,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             // 1차 체크(정보가 변조되지 않았는지 체크)
             if (jwtProvider.verify(accessToken)) {
                 Map<String, Object> claims = jwtProvider.getClaims(accessToken);
-                String userId = (String) claims.get("userId");
-                Member member = memberService.getByUsername(userId).toEntity();
+                String username = (String) claims.get("username");
+                Member member = memberService.getByUsername(username).toEntity();
                 forceAuthentication(member);
             }
         }
