@@ -29,6 +29,7 @@ public class MemberServiceTest {
         String nickname = "nickname";
 
         member = MemberDto.makeMemberDto(username, password, nickname, email);
+        memberService.signUp(member);
     }
     @AfterEach
     void afterEach() {
@@ -41,7 +42,6 @@ public class MemberServiceTest {
         MemberDto memberDto = member;
 
         //when
-        memberService.signUp(memberDto);
 
         //then
         MemberDto savedMemberDto = memberService.getByUsername(memberDto.getUsername());
@@ -51,9 +51,7 @@ public class MemberServiceTest {
     @DisplayName("update member's email")
     void updateTest() {
         //given
-        MemberDto memberDto = member;
-        memberService.signUp(memberDto);
-        MemberDto savedMemberDto = memberService.getByUsername(memberDto.getUsername());
+        MemberDto savedMemberDto = memberService.getByUsername(member.getUsername());
 
         String email = "modifiedEmail@gmail.com";
 
@@ -61,7 +59,7 @@ public class MemberServiceTest {
         memberService.modifyEmail(savedMemberDto, email);
 
         //then
-        MemberDto modifiedMemberDto = memberService.getByUsername(memberDto.getUsername());
+        MemberDto modifiedMemberDto = memberService.getByUsername(member.getUsername());
         assertThat(modifiedMemberDto.getMemId()).isEqualTo(savedMemberDto.getMemId());
         assertThat(modifiedMemberDto.getEmail()).isEqualTo(email);
     }
@@ -69,9 +67,7 @@ public class MemberServiceTest {
     @DisplayName("change password")
     void changePassword() {
         //given
-        MemberDto memberDto = member;
-        memberService.signUp(memberDto);
-        MemberDto savedMemberDto = memberService.getByUsername(memberDto.getUsername());
+        MemberDto savedMemberDto = memberService.getByUsername(member.getUsername());
 
         String newPassword = "modifypassword123!";
         String oldPassword = "password1234!";
@@ -80,7 +76,7 @@ public class MemberServiceTest {
         memberService.changePassword(savedMemberDto, oldPassword, newPassword);
 
         //then
-        MemberDto modifiedMemberDto = memberService.getByUsername(memberDto.getUsername());
+        MemberDto modifiedMemberDto = memberService.getByUsername(member.getUsername());
         assertThat(modifiedMemberDto.getMemId()).isEqualTo(savedMemberDto.getMemId());
         assertThat(passwordEncoder.matches(newPassword, modifiedMemberDto.getPassword())).isTrue();
     }
@@ -88,15 +84,12 @@ public class MemberServiceTest {
     @DisplayName("delete member")
     void deleteMember() {
         //given
-        MemberDto memberDto = member;
-        memberService.signUp(memberDto);
-
         List<MemberDto> allMembers = memberService.getAllMember();
         assertThat(allMembers.size()).isEqualTo(1);
 
         //when
-        memberDto = memberService.getByUsername(memberDto.getUsername());
-        memberService.deleteMember(memberDto);
+        member = memberService.getByUsername(member.getUsername());
+        memberService.deleteMember(member);
         
         //then
         allMembers = memberService.getAllMember();
