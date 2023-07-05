@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
+import com.example.bo.base.jwt.provider.JwtProvider;
 import com.example.bo.member.entity.Role;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +21,7 @@ public class MemberServiceTest {
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     MemberDto member;
     private MemoryMemberRepository memberRepository = new MemoryMemberRepository();
-    private MemberService memberService = new MemberServiceImpl(passwordEncoder, memberRepository);
+    private MemberService memberService = new MemberServiceImpl(null, passwordEncoder, memberRepository);
     
     @BeforeEach
     void beforeEach() {

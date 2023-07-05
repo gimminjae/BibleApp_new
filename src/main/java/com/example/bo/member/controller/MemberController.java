@@ -2,6 +2,7 @@ package com.example.bo.member.controller;
 
 import com.example.bo.member.dto.MemberDto;
 import com.example.bo.member.entity.AuthUser;
+import org.apache.coyote.Response;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping("/api/members")
 public class MemberController {
     private final MemberService memberService;
 
@@ -26,21 +27,41 @@ public class MemberController {
         memberService.signUp(memberDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(MemberDto memberDto) {
         Map<String, String> tokensInfo = memberService.login(memberDto);
         return new ResponseEntity<>(tokensInfo, HttpStatus.OK);
     }
+
+    //    @DeleteMapping("/logout")
+//    public ResponseEntity<Void> logout(@AuthenticationPrincipal MemberContext memberContext) {
+//        memberService.deleteRefreshToken(memberContext.getUserId());
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
+//    @GetMapping("/regenAccessToken")
+//    public ResponseEntity<String> regenToken(@RequestParam String refreshToken) {
+//        return new ResponseEntity<>(memberService.regenAccessToken(refreshToken), HttpStatus.OK);
+//    }
+
+    @GetMapping("/me")
+    public ResponseEntity<Map<String, Object>> me(@AuthenticationPrincipal AuthUser authUser) {
+        return new ResponseEntity<>(Map.of("member", authUser == null ? "" : authUser), HttpStatus.OK);
+    }
+
     @PatchMapping("/email")
     public ResponseEntity<Void> modifyEmail(@AuthenticationPrincipal AuthUser authUser, @RequestBody String newEmail) {
         memberService.modifyEmail(memberService.getByUsername(authUser.getUsername()), newEmail);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @PatchMapping("/nickname")
     public ResponseEntity<Void> modifyNickname(@AuthenticationPrincipal AuthUser authUser, @RequestBody String newNickname) {
         memberService.modifyNickname(memberService.getByUsername(authUser.getUsername()), newNickname);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @PatchMapping("/password")
     public ResponseEntity<Void> modifyPassword(@AuthenticationPrincipal AuthUser authUser, @RequestBody Map<String, String> passwordMap) {
         memberService.changePassword(
@@ -51,6 +72,7 @@ public class MemberController {
         );
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @PatchMapping("/empower")
     @PreAuthorize("hasAnyRole('ADMIN', 'DEPTADMIN')")
 //    @PreAuthorize("hasAnyAuthority()")
@@ -58,11 +80,13 @@ public class MemberController {
         memberService.empowerDEPTSUBADMIN(memberService.getByMemId(memId));
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @DeleteMapping
+
+    @DeleteMapping("/me")
     public ResponseEntity<Void> deleteMine(@AuthenticationPrincipal AuthUser authUser) {
         memberService.deleteMember(memberService.getByMemId(authUser.getMemId()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
 //    @PreAuthorize("hasAnyAuthority()")

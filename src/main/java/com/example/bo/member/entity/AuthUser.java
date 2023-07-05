@@ -34,6 +34,18 @@ public class AuthUser extends User {
         this.username = username1;
         this.createDateTime = createDateTime;
     }
+
+    public AuthUser(Member member) {
+        super(member.getUsername(), member.getPassword(), member.getAuthorities());
+
+        memId = member.getMemId();
+        nickname = member.getNickname();
+        username = member.getUsername();
+        role = member.getRole().toString();
+        createDateTime = member.getCreateDateTime();
+//        this.role = member.getAuthorities().get(0).toString();
+    }
+
     @Override
     public Set<GrantedAuthority> getAuthorities() {
         return super.getAuthorities().stream().collect(Collectors.toSet());

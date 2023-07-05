@@ -1,6 +1,8 @@
 package com.example.bo.member.dto;
 
 
+import com.example.bo.member.entity.Member;
+import com.example.bo.member.entity.Role;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,6 +38,19 @@ public class MemberDto {
                 .password(password)
                 .nickname(nickname)
                 .email(email)
+                .build();
+    }
+
+    public Member toEntity() {
+        return Member.builder()
+                .memId(this.getMemId())
+                .createDateTime(this.getCreateDateTime())
+                .updateDateTime(this.getUpdateDateTime())
+                .email(this.getEmail())
+                .nickname(this.getNickname())
+                .username(this.getUsername())
+                .password(this.getPassword())
+                .role(Role.valueOf(this.getRole()))
                 .build();
     }
 }

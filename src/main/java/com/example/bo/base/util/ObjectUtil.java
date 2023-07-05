@@ -18,7 +18,7 @@ public class ObjectUtil {
         T t = optionalT.orElse(null);
 
         if(t == null) {
-            throw new NullPointerException("message");
+            throw new NullPointerException(message);
         }
         return t;
     }

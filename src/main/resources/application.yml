@@ -1,4 +1,6 @@
 spring:
+  custom:
+    secretKey: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
   profiles:
     active: ${RUN_TYPE}
   datasource:

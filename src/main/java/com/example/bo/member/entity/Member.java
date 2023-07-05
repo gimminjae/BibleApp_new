@@ -2,7 +2,7 @@ package com.example.bo.member.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.*;
 
 import com.example.bo.member.dto.MemberDto;
 
@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Entity
 @Getter
@@ -101,5 +103,30 @@ public class Member {
 
     public void empowerDEPTSUBADMIN() {
         setRole(Role.DEPTSUBADMIN);
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        if(this.getRole().toString().equals("ADMIN")) {
+            authorities.add(new SimpleGrantedAuthority("ADMIN"));
+        } else if(this.getRole().toString().equals("DEPTADMIN")) {
+            authorities.add(new SimpleGrantedAuthority("DEPTADMIN"));
+        } else if (this.getRole().toString().equals("DEPTSUBADMIN")) {
+            authorities.add(new SimpleGrantedAuthority("DEPTSUBADMIN"));
+        } else {
+            authorities.add(new SimpleGrantedAuthority("MEMBER"));
+        }
+
+        return authorities;
+    }
+
+    public Map<String, Object> getAccessTokenClaims() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("username", getUsername());
+        map.put("createDateTime", getCreateDateTime().toString());
+        map.put("nickname", getNickname());
+        map.put("email", getEmail());
+
+        return map;
     }
 }
