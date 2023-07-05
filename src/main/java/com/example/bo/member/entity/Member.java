@@ -9,12 +9,16 @@ import com.example.bo.member.dto.MemberDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Member {
     @Id
     private String memId;
@@ -36,13 +40,9 @@ public class Member {
     @Column(unique = true)
     private String email;
 
-    public Member() {
-
-    }
-
     public static Member from(MemberDto memberDto) {
         return Member.builder()
-                .memId("%s%s".formatted(LocalDate.now().toString(), UUID.randomUUID().toString().replace("-", "")))
+                .memId("%s-%s".formatted(LocalDate.now().toString().replace("-", ""), UUID.randomUUID().toString().replace("-", "")))
                 .createDateTime(LocalDateTime.now())
                 .updateDateTime(LocalDateTime.now())
                 .username(memberDto.getUsername())
