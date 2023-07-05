@@ -64,5 +64,15 @@ public class MemberServiceImpl implements MemberService {
     public void deleteMember(MemberDto memberDto) {
         memberRepository.deleteById(memberDto.getMemId());
     }
-    
+
+    @Override
+    public void modifyNickname(MemberDto savedMemberDto, String email) {
+
+    }
+
+    @Override
+    public void empowerDEPTSUBADMIN(MemberDto savedMemberDto) {
+
+    }
+
 }

@@ -17,5 +17,8 @@ public interface MemberService {
     List<MemberDto> getAllMember();
 
     void deleteMember(MemberDto memberDto);
-    
+
+    void modifyNickname(MemberDto savedMemberDto, String email);
+
+    void empowerDEPTSUBADMIN(MemberDto savedMemberDto);
 }

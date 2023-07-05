@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
+import com.example.bo.member.entity.Role;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -94,5 +95,35 @@ public class MemberServiceTest {
         //then
         allMembers = memberService.getAllMember();
         assertThat(allMembers.size()).isEqualTo(0);
+    }
+    @Test
+    @DisplayName("modify nickname")
+    void modifyNickname() {
+        //given
+        MemberDto savedMemberDto = memberService.getByUsername(member.getUsername());
+
+        String nickname = "modifiedNickname";
+
+        //when
+        memberService.modifyNickname(savedMemberDto, nickname);
+
+        //then
+        MemberDto modifiedMemberDto = memberService.getByUsername(member.getUsername());
+        assertThat(modifiedMemberDto.getMemId()).isEqualTo(savedMemberDto.getMemId());
+        assertThat(modifiedMemberDto.getNickname()).isEqualTo(nickname);
+    }
+    @Test
+    @DisplayName("change role DEPTSUBADMIN")
+    void changeRoleDEPTSUBADMIN() {
+        //given
+        MemberDto savedMemberDto = memberService.getByUsername(member.getUsername());
+
+        //when
+        memberService.empowerDEPTSUBADMIN(savedMemberDto);
+
+        //then
+        MemberDto modifiedMemberDto = memberService.getByUsername(member.getUsername());
+        assertThat(modifiedMemberDto.getMemId()).isEqualTo(savedMemberDto.getMemId());
+        assertThat(modifiedMemberDto.getRole().toString()).isEqualTo(Role.DEPTSUBADMIN.toString());
     }
 }
