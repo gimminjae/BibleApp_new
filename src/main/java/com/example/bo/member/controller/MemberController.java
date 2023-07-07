@@ -64,7 +64,7 @@ public class MemberController {
     @PatchMapping("/password")
     public ResponseEntity<Void> modifyPassword(@AuthenticationPrincipal AuthUser authUser, @RequestBody Map<String, String> passwordMap) {
         memberService.changePassword(
-                memberService.getByUsername(authUser.getUsername()),
+                authUser.getMemId(),
                 passwordMap.get("oldPassword"),
                 passwordMap.get("newPassword1"),
                 passwordMap.get("newPassword2")

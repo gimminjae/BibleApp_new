@@ -66,12 +66,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void changePassword(MemberDto memberDto, String oldPassword, String newPassword1, String newPassword2) {
+    public void changePassword(String memId, String oldPassword, String newPassword1, String newPassword2) {
         if(!newPassword1.equals(newPassword2)) {
             throw new IllegalArgumentException(TWO_NEW_PASSWORD_NOT_CORRECT_MSG);
         }
-        Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(memberDto.getMemId()));
-        if(passwordEncoder.matches(oldPassword, memberDto.getPassword())) {
+        Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(memId));
+        if(passwordEncoder.matches(oldPassword, member.getPassword())) {
             member.changePassword(passwordEncoder.encode(newPassword1));
         } else {
             throw new AccessDeniedException(NO_ACCESS_AUTH_MSG);

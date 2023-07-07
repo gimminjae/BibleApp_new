@@ -76,7 +76,7 @@ public class MemberServiceTest {
         String oldPassword = "password1234!";
 
         //when
-        memberService.changePassword(savedMemberDto, oldPassword, newPassword1, newPassword2);
+        memberService.changePassword(savedMemberDto.getMemId(), oldPassword, newPassword1, newPassword2);
 
         //then
         MemberDto modifiedMemberDto = memberService.getByUsername(member.getUsername());
