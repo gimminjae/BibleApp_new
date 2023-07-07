@@ -23,15 +23,18 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/confirmUsernameDuplication")
-    @PostMapping
     public ResponseEntity<Void> confirmUsernameDuplication(@RequestParam String username) {
         memberService.confirmUsernameDuplication(username);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/confirmEmailDuplication")
-    @PostMapping
-    public ResponseEntity<Void> signup(@RequestParam String email) {
+    public ResponseEntity<Void> confirmEmailDuplication(@RequestParam String email) {
         memberService.confirmEmailDuplication(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping("/signup")
+    public ResponseEntity<Void> signup(@RequestBody MemberDto memberDto) {
+        memberService.signUp(memberDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

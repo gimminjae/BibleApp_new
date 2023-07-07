@@ -43,6 +43,30 @@ class MemberRepositoryImplTest {
         assertThat(member.get().getMemId()).isEqualTo(memId);
     }
     @Test
+    @DisplayName("findByNickname")
+    void findByNickname() {
+        //given
+
+        //when
+        Optional<Member> member = memberRepository.findByNickname(nickname);
+
+        //then
+        assertThat(member.isPresent()).isTrue();
+        assertThat(member.get().getMemId()).isEqualTo(memId);
+    }
+    @Test
+    @DisplayName("findByEmail")
+    void findByEmail() {
+        //given
+
+        //when
+        Optional<Member> member = memberRepository.findByEmail(email);
+
+        //then
+        assertThat(member.isPresent()).isTrue();
+        assertThat(member.get().getMemId()).isEqualTo(memId);
+    }
+    @Test
     @DisplayName("findById")
     void findById() {
         //given

@@ -4,15 +4,15 @@ package com.example.bo.member.dto;
 import com.example.bo.member.entity.Member;
 import com.example.bo.member.entity.Role;
 import jakarta.validation.constraints.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MemberDto {
     private String memId;
     private LocalDateTime createDateTime;
@@ -24,6 +24,8 @@ public class MemberDto {
     @NotNull
     @Pattern (regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}", message = "비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8 ~20자의 비밀번호여야 합니다.")
     private String password;
+    @Pattern (regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}", message = "비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8 ~20자의 비밀번호여야 합니다.")
+    private String password2;
     @NotNull
     @Size(min = 5, max = 10, message = "닉네임은 5 ~ 10자 이어야 합니다.")
     private String nickname;
