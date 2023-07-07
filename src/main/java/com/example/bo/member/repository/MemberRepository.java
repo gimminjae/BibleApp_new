@@ -21,4 +21,6 @@ public interface MemberRepository {
     List<Member> findAll();
 
     void deleteById(String memId);
+
+    Optional<Member> findByNickname(String nickname);
 }

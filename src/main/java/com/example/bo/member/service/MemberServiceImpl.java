@@ -150,6 +150,13 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Override
+    public void confirmNicknameDuplication(String nickname) {
+        if (memberRepository.findByNickname(nickname).isPresent()) {
+            throw new DataIntegrityViolationException(NICKNAME_DUPLICATION_MSG);
+        }
+    }
+
     private String genAccessToken(Member member) {
         return jwtProvider.generateAccessToken(member.getAccessTokenClaims(), ACCESS_TOKEN_MAXAGE);
     }

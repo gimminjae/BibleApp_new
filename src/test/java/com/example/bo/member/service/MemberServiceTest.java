@@ -6,11 +6,9 @@ import java.util.List;
 
 import com.example.bo.base.jwt.provider.JwtProvider;
 import com.example.bo.member.entity.Role;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -127,5 +125,32 @@ public class MemberServiceTest {
         MemberDto modifiedMemberDto = memberService.getByUsername(member.getUsername());
         assertThat(modifiedMemberDto.getMemId()).isEqualTo(savedMemberDto.getMemId());
         assertThat(modifiedMemberDto.getRole().toString()).isEqualTo(Role.DEPTSUBADMIN.toString());
+    }
+    @Test
+    @DisplayName("confirm email duplication")
+    void confirmEmailDuplication() {
+        //given
+        String email = "testmail@naver.com";
+
+        //when & then
+        Assertions.assertThrows(DataIntegrityViolationException.class, () -> memberService.confirmEmailDuplication(email));
+    }
+    @Test
+    @DisplayName("confirm username duplication")
+    void confirmUsernameDuplication() {
+        //given
+        String username = "testuser";
+
+        //when & then
+        Assertions.assertThrows(DataIntegrityViolationException.class, () -> memberService.confirmUsernameDuplication(username));
+    }
+    @Test
+    @DisplayName("confirm nickname duplication")
+    void confirmNicknameDuplication() {
+        //given
+        String nickname = "nickname";
+
+        //when & then
+        Assertions.assertThrows(DataIntegrityViolationException.class, () -> memberService.confirmNicknameDuplication(nickname));
     }
 }

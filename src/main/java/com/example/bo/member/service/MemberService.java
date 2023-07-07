@@ -34,4 +34,6 @@ public interface MemberService {
     void confirmUsernameDuplication(String username);
 
     void confirmEmailDuplication(String email);
+
+    void confirmNicknameDuplication(String nickname);
 }
