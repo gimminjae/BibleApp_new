@@ -136,6 +136,20 @@ public class MemberServiceImpl implements MemberService {
         return regenAccessTokenWithRefreshToken(refreshToken);
     }
 
+    @Override
+    public void confirmUsernameDuplication(String username) {
+        if (memberRepository.findByUsername(username).isPresent()) {
+            throw new DataIntegrityViolationException(USERNAME_DUPLICATION_MSG);
+        }
+    }
+
+    @Override
+    public void confirmEmailDuplication(String email) {
+        if (memberRepository.findByEmail(email).isPresent()) {
+            throw new DataIntegrityViolationException(EMAIL_DUPLICATION_MSG);
+        }
+    }
+
     private String genAccessToken(Member member) {
         return jwtProvider.generateAccessToken(member.getAccessTokenClaims(), ACCESS_TOKEN_MAXAGE);
     }

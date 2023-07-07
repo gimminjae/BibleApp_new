@@ -22,9 +22,16 @@ import java.util.Map;
 public class MemberController {
     private final MemberService memberService;
 
+    @GetMapping("/confirmUsernameDuplication")
     @PostMapping
-    public ResponseEntity<Void> signup(MemberDto memberDto) {
-        memberService.signUp(memberDto);
+    public ResponseEntity<Void> confirmUsernameDuplication(@RequestParam String username) {
+        memberService.confirmUsernameDuplication(username);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/confirmEmailDuplication")
+    @PostMapping
+    public ResponseEntity<Void> signup(@RequestParam String email) {
+        memberService.confirmEmailDuplication(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

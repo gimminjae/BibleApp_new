@@ -30,4 +30,8 @@ public interface MemberService {
     void logout(String memId);
 
     String regenAccessToken(String refreshToken);
+
+    void confirmUsernameDuplication(String username);
+
+    void confirmEmailDuplication(String email);
 }
