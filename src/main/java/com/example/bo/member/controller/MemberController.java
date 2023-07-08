@@ -27,9 +27,19 @@ public class MemberController {
         memberService.confirmUsernameDuplication(username);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @GetMapping("/confirmEmailDuplication")
-    public ResponseEntity<Void> confirmEmailDuplication(@RequestParam String email) {
-        memberService.confirmEmailDuplication(email);
+    @GetMapping("/confirmNicknameDuplication")
+    public ResponseEntity<Void> confirmNicknameDuplication(@RequestParam String nickname) {
+        memberService.confirmNicknameDuplication(nickname);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/confirmEmail")
+    public ResponseEntity<Void> confirmEmail(@RequestParam String email) {
+        memberService.confirmEmail(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/confirmEmailCode")
+    public ResponseEntity<Void> confirmEmailCode(@RequestParam String email, @RequestParam String authCode) {
+        memberService.confirmEmailCode(email, authCode);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PostMapping("/signup")

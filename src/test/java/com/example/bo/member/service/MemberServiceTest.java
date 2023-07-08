@@ -19,7 +19,7 @@ public class MemberServiceTest {
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     MemberDto member;
     private MemoryMemberRepository memberRepository = new MemoryMemberRepository();
-    private MemberService memberService = new MemberServiceImpl(null, null, passwordEncoder, memberRepository);
+    private MemberService memberService = new MemberServiceImpl(null, null, null, passwordEncoder, memberRepository, null);
     
     @BeforeEach
     void beforeEach() {
@@ -133,7 +133,7 @@ public class MemberServiceTest {
         String email = "testmail@naver.com";
 
         //when & then
-        Assertions.assertThrows(DataIntegrityViolationException.class, () -> memberService.confirmEmailDuplication(email));
+        Assertions.assertThrows(DataIntegrityViolationException.class, () -> memberService.confirmEmail(email));
     }
     @Test
     @DisplayName("confirm username duplication")

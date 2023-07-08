@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.example.bo.base.jwt.provider.JwtProvider;
+import com.example.bo.base.mail.dto.MailTo;
+import com.example.bo.base.mail.service.GoogleEmailService;
+import com.example.bo.member.code.AuthCode;
+import com.example.bo.member.code.AuthCodeRedisRepository;
 import com.example.bo.member.refresh.entity.RefreshToken;
 import com.example.bo.member.refresh.repository.RefreshTokenRedisRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -34,10 +38,13 @@ public class MemberServiceImpl implements MemberService {
     private final static String TWO_NEW_PASSWORD_NOT_CORRECT_MSG = "두 개의 새 비밀번호가 일치하지 않습니다.";
     private final static String INVALID_REQUEST_MSG = "유효하지 않은 요청입니다.";
     private final static String EXPIRE_RELOGIN_MSG = "기간 만료 : 재로그인해주세요.";
+    private final static String NOT_CORRECT_AUTHCODE = "인증코드가 올바르지 않습니다.";
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
+    private final AuthCodeRedisRepository authCodeRedisRepository;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+    private final GoogleEmailService googleEmailService;
 
     @Override
     public void signUp(MemberDto memberDto) {
@@ -148,16 +155,27 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void confirmEmailDuplication(String email) {
+    public void confirmEmail(String email) {
         if (memberRepository.findByEmail(email).isPresent()) {
             throw new DataIntegrityViolationException(EMAIL_DUPLICATION_MSG);
         }
+        String authCode = ObjectUtil.generateRandomString();
+        googleEmailService.sendEmail(MailTo.sendEmailAuthCode(authCode, email));
+        authCodeRedisRepository.save(AuthCode.from(authCode, email));
     }
 
     @Override
     public void confirmNicknameDuplication(String nickname) {
         if (memberRepository.findByNickname(nickname).isPresent()) {
             throw new DataIntegrityViolationException(NICKNAME_DUPLICATION_MSG);
+        }
+    }
+
+    @Override
+    public void confirmEmailCode(String email, String code) {
+        AuthCode authCode = ObjectUtil.isNullExceptionElseReturnObJect(authCodeRedisRepository.findById(email));
+        if(!authCode.getCode().equals(code)) {
+            throw new AccessDeniedException(NOT_CORRECT_AUTHCODE);
         }
     }
 
