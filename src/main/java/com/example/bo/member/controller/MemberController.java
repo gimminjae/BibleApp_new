@@ -75,8 +75,8 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PatchMapping("/nickname")
-    public ResponseEntity<Void> modifyNickname(@AuthenticationPrincipal AuthUser authUser, @RequestBody String newNickname) {
+    @PatchMapping("/nickname/{newNickname}")
+    public ResponseEntity<Void> modifyNickname(@AuthenticationPrincipal AuthUser authUser, @PathVariable String newNickname) {
         memberService.modifyNickname(memberService.getByUsername(authUser.getUsername()), newNickname);
         return new ResponseEntity<>(HttpStatus.OK);
     }
