@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
-@JsonIncludeProperties({"nickname", "role", "createDateTime", "memId"}) //"memId", "username"
+@JsonIncludeProperties({"nickname", "role", "createDateTime", "memId", "email"}) //"memId", "username"
 public class AuthUser extends User {
     private final String memId;
     private final String nickname;
@@ -21,6 +21,7 @@ public class AuthUser extends User {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private final LocalDateTime createDateTime;
     private String role;
+    private String email;
     public AuthUser(String username, String password, Collection<? extends GrantedAuthority> authorities, String memId, String nickname, String username1, LocalDateTime createDateTime) {
         super(username, password, authorities);
         this.memId = memId;
@@ -45,6 +46,7 @@ public class AuthUser extends User {
         username = member.getUsername();
         role = member.getRole().toString();
         createDateTime = member.getCreateDateTime();
+        email = member.getEmail();
 //        this.role = member.getAuthorities().get(0).toString();
     }
 
@@ -59,5 +61,6 @@ public class AuthUser extends User {
         this.username = member.getUsername();
         this.role = authorities.get(0).toString();
         this.createDateTime = member.getCreateDateTime();
+        this.email = member.getEmail();
     }
 }

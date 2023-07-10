@@ -201,11 +201,9 @@ public class MemberServiceImpl implements MemberService {
 
     private String regenAccessTokenWithRefreshToken(String refreshTokenString) {
         RefreshToken refreshToken;
-        try {
-            refreshToken = refreshTokenRedisRepository.findByRefreshToken(refreshTokenString);
-        } catch (NullPointerException e) {
-            throw new NullPointerException(INVALID_REQUEST_MSG);
-        }
+        refreshToken = refreshTokenRedisRepository.findByRefreshToken(refreshTokenString);
+        if(refreshToken == null) throw new NullPointerException(INVALID_REQUEST_MSG);
+
         if(LocalDateTime.now().isAfter(refreshToken.getExpiredDateTime())) {
             throw new AccessDeniedException(EXPIRE_RELOGIN_MSG);
         }

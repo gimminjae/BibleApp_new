@@ -32,14 +32,14 @@ public class MemberController {
         memberService.confirmNicknameDuplication(nickname);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @GetMapping("/confirmEmail")
-    public ResponseEntity<Void> confirmEmail(@RequestParam String email) {
+    @PostMapping("/confirmEmail/{email}")
+    public ResponseEntity<Void> confirmEmail(@PathVariable String email) {
         memberService.confirmEmail(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @GetMapping("/confirmEmailCode")
-    public ResponseEntity<Void> confirmEmailCode(@RequestParam String email, @RequestParam String authCode) {
-        memberService.confirmEmailCode(email, authCode);
+    @PostMapping("/confirmEmailCode")
+    public ResponseEntity<Void> confirmEmailCode(@RequestBody Map<String, String> emailMapAuthCode) {
+        memberService.confirmEmailCode(emailMapAuthCode.get("email"), emailMapAuthCode.get("authCode"));
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PostMapping("/signup")
@@ -69,8 +69,8 @@ public class MemberController {
         return new ResponseEntity<>(Map.of("member", authUser == null ? "" : authUser), HttpStatus.OK);
     }
 
-    @PatchMapping("/email")
-    public ResponseEntity<Void> modifyEmail(@AuthenticationPrincipal AuthUser authUser, @RequestBody String newEmail) {
+    @PatchMapping("/email/{newEmail}")
+    public ResponseEntity<Void> modifyEmail(@AuthenticationPrincipal AuthUser authUser, @PathVariable String newEmail) {
         memberService.modifyEmail(memberService.getByUsername(authUser.getUsername()), newEmail);
         return new ResponseEntity<>(HttpStatus.OK);
     }
