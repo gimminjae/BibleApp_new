@@ -29,10 +29,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final static int ACCESS_TOKEN_MAXAGE = 60 * 30;
-    private final static String LOGIN_FAIL_MSG = "아이디 혹은 비밀번호를 확인하세요.";
+    private final static String LOGIN_FAIL_MSG = "이메일 혹은 비밀번호를 확인하세요.";
     private final static String NO_ACCESS_AUTH_MSG = "권한이 없습니다.";
     private final static String NICKNAME_DUPLICATION_MSG = "중복된 닉네임입니다.";
-    private final static String USERNAME_DUPLICATION_MSG = "중복된 아이디입니다.";
     private final static String COMMON_DUPLICATION_MSG = "중복된 요소가 있습니다.";
     private final static String EMAIL_DUPLICATION_MSG = "중복된 이메일입니다.";
     private final static String TWO_NEW_PASSWORD_NOT_CORRECT_MSG = "두 개의 새 비밀번호가 일치하지 않습니다.";
