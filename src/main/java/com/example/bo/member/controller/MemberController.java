@@ -1,5 +1,6 @@
 package com.example.bo.member.controller;
 
+import com.example.bo.base.exception.ValidationUtil;
 import com.example.bo.member.dto.MemberDto;
 import com.example.bo.member.entity.AuthUser;
 import jakarta.validation.Valid;
@@ -42,13 +43,7 @@ public class MemberController {
     }
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@RequestBody @Valid MemberDto memberDto, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            StringBuilder errorString = new StringBuilder();
-            for(ObjectError error : bindingResult.getAllErrors()) {
-                errorString.append("%s%s".formatted(error.getDefaultMessage(), "\n"));
-            }
-            throw new AccessDeniedException(errorString.toString());
-        }
+        ValidationUtil.returnValidError(bindingResult);
         memberService.signUp(memberDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
