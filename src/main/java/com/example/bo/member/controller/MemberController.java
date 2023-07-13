@@ -2,12 +2,16 @@ package com.example.bo.member.controller;
 
 import com.example.bo.member.dto.MemberDto;
 import com.example.bo.member.entity.AuthUser;
+import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.bo.member.service.MemberService;
@@ -43,13 +47,20 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PostMapping("/signup")
-    public ResponseEntity<Void> signup(@RequestBody MemberDto memberDto) {
+    public ResponseEntity<Void> signup(@RequestBody @Valid MemberDto memberDto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            StringBuilder errorString = new StringBuilder();
+            for(ObjectError error : bindingResult.getAllErrors()) {
+                errorString.append("%s%s".formatted(error.getDefaultMessage(), "\n"));
+            }
+            throw new AccessDeniedException(errorString.toString());
+        }
         memberService.signUp(memberDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(MemberDto memberDto) {
+    public ResponseEntity<Map<String, String>> login(MemberDto memberDto, BindingResult bindingResult) {
         Map<String, String> tokensInfo = memberService.login(memberDto);
         return new ResponseEntity<>(tokensInfo, HttpStatus.OK);
     }
