@@ -10,8 +10,6 @@ import com.example.bo.member.entity.Member;
 
 public interface MemberRepository {
 
-    Optional<Member> findByUsername(String username);
-
     Optional<Member> findByEmail(String email);
 
     Member save(Member member);

@@ -27,21 +27,8 @@ class MemberRepositoryImplTest {
     private MemberRepository memberRepository;
 
     String memId = "20230705-b5aa2484b8b345d586804fef824bbd8e";
-    String username = "testuser";
     String email = "testmail@naver.com";
     String nickname = "nickname";
-    @Test
-    @DisplayName("findByUsername")
-    void findByUsername() {
-        //given
-
-        //when
-        Optional<Member> member = memberRepository.findByUsername(username);
-
-        //then
-        assertThat(member.isPresent()).isTrue();
-        assertThat(member.get().getMemId()).isEqualTo(memId);
-    }
     @Test
     @DisplayName("findByNickname")
     void findByNickname() {
@@ -76,28 +63,7 @@ class MemberRepositoryImplTest {
 
         //then
         assertThat(member.isPresent()).isTrue();
-        assertThat(member.get().getUsername()).isEqualTo(username);
-    }
-    @Test
-    @DisplayName("modify Member's email")
-    void modifyMemberEmailTest() {
-        //given
-        String modifiedEmail = "modifiedEmail@naver.com";
-        String modifiedPassword = "modifiedPassword123!";
-        String modifiedNickname = "modifiedNickname";
-        Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByUsername(username));
-
-        //when
-        member.modifyEmail(modifiedEmail);
-        member.changePassword(passwordEncoder.encode(modifiedPassword));
-        member.modifyNickname(modifiedNickname);
-        memberRepository.save(member);
-
-        //then
-        member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByUsername(username));
-        assertThat(member.getEmail()).isEqualTo(modifiedEmail);
-        assertThat(passwordEncoder.matches(modifiedPassword, member.getPassword())).isTrue();
-        assertThat(member.getNickname()).isEqualTo(modifiedNickname);
+        assertThat(member.get().getEmail()).isEqualTo(email);
     }
     @Test
     @DisplayName("getAllMember and signup")
@@ -112,7 +78,7 @@ class MemberRepositoryImplTest {
         assertThat(allMembers.size()).isEqualTo(1);
 
         //when
-        memberRepository.save(Member.from(MemberDto.makeMemberDto(username, password, nickname, email)));
+        memberRepository.save(Member.from(MemberDto.makeMemberDto(email, nickname, password)));
 
         //then
         allMembers = memberRepository.findAll();

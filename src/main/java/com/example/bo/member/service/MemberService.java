@@ -9,8 +9,6 @@ public interface MemberService {
 
     void signUp(MemberDto memberDto);
 
-    MemberDto getByUsername(String username);
-
     void modifyEmail(MemberDto memberDto, String email);
 
     void changePassword(String memId, String oldPassword, String newPassword1, String newPassword2);
@@ -31,11 +29,11 @@ public interface MemberService {
 
     String regenAccessToken(String refreshToken);
 
-    void confirmUsernameDuplication(String username);
-
     void confirmEmail(String email);
 
     void confirmNicknameDuplication(String nickname);
 
     void confirmEmailCode(String email, String authCode);
+
+    MemberDto getByEmail(String email);
 }

@@ -28,9 +28,6 @@ public class Member {
 
     private LocalDateTime updateDateTime;
 
-    @Column(unique = true)
-    private String username;
-
     private String password;
 
     @Column(unique = true)
@@ -47,7 +44,6 @@ public class Member {
                 .memId("%s-%s".formatted(LocalDate.now().toString().replace("-", ""), UUID.randomUUID().toString().replace("-", "")))
                 .createDateTime(LocalDateTime.now())
                 .updateDateTime(LocalDateTime.now())
-                .username(memberDto.getUsername())
                 .password(memberDto.getPassword())
                 .nickname(memberDto.getNickname())
                 .role(memberDto.getRole() != null && memberDto.getRole().equals("ADMIN") ? Role.ADMIN : Role.MEMBER)
@@ -60,7 +56,6 @@ public class Member {
                 .memId(this.getMemId())
                 .createDateTime(this.getCreateDateTime())
                 .updateDateTime(this.getUpdateDateTime())
-                .username(this.getUsername())
                 .password(this.getPassword())
                 .email(this.getEmail())
                 .nickname(getNickname())
@@ -122,7 +117,6 @@ public class Member {
 
     public Map<String, Object> getAccessTokenClaims() {
         Map<String, Object> map = new HashMap<>();
-        map.put("username", getUsername());
         map.put("createDateTime", getCreateDateTime().toString());
         map.put("nickname", getNickname());
         map.put("email", getEmail());

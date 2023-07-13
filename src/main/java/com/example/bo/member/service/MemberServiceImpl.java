@@ -61,11 +61,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto getByUsername(String username) {
-        return ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByUsername(username)).toDto();
-    }
-
-    @Override
     public void modifyEmail(MemberDto memberDto, String email) {
         Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(memberDto.getMemId()));
         member.modifyEmail(email);
@@ -120,7 +115,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Map<String, String> login(MemberDto memberDto) {
-        Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByUsername(memberDto.getUsername()), LOGIN_FAIL_MSG);
+        Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByEmail(memberDto.getEmail()), LOGIN_FAIL_MSG);
         if(!passwordEncoder.matches(memberDto.getPassword(), member.getPassword())) {
             throw new AccessDeniedException(LOGIN_FAIL_MSG);
         }
@@ -148,13 +143,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void confirmUsernameDuplication(String username) {
-        if (memberRepository.findByUsername(username).isPresent()) {
-            throw new DataIntegrityViolationException(USERNAME_DUPLICATION_MSG);
-        }
-    }
-
-    @Override
     public void confirmEmail(String email) {
         if (memberRepository.findByEmail(email).isPresent()) {
             throw new DataIntegrityViolationException(EMAIL_DUPLICATION_MSG);
@@ -177,6 +165,11 @@ public class MemberServiceImpl implements MemberService {
         if(!authCode.getCode().equals(code)) {
             throw new AccessDeniedException(NOT_CORRECT_AUTHCODE);
         }
+    }
+
+    @Override
+    public MemberDto getByEmail(String email) {
+        return ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByEmail(email)).toDto();
     }
 
     private String genAccessToken(Member member) {
