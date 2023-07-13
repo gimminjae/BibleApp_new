@@ -54,7 +54,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(MemberDto memberDto, BindingResult bindingResult) {
+    public ResponseEntity<Map<String, String>> login(MemberDto memberDto) {
         Map<String, String> tokensInfo = memberService.login(memberDto);
         return new ResponseEntity<>(tokensInfo, HttpStatus.OK);
     }

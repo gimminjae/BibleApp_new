@@ -69,7 +69,6 @@ class MemberRepositoryImplTest {
     @DisplayName("getAllMember and signup")
     void getAllMemberAndSignup() {
         //given
-        String username = "testuser2";
         String email = "testmail2@naver.com";
         String nickname = "nickname2";
         String password = "newPassword234!";
