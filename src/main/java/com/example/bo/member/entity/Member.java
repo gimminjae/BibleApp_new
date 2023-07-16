@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import com.example.bo.mapping.memplan.entity.MemberPlan;
 import com.example.bo.member.dto.MemberDto;
 
 import jakarta.persistence.*;
@@ -38,6 +39,9 @@ public class Member {
 
     @Column(unique = true)
     private String email;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MemberPlan> plan;
 
     public static Member from(MemberDto memberDto) {
         return Member.builder()
