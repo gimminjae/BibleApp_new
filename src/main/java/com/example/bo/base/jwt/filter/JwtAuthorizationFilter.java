@@ -45,8 +45,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             // 1차 체크(정보가 변조되지 않았는지 체크)
             if (jwtProvider.verify(accessToken)) {
                 Map<String, Object> claims = jwtProvider.getClaims(accessToken);
-                String username = (String) claims.get("username");
-                Member member = memberService.getByUsername(username).toEntity();
+                String email = (String) claims.get("email");
+                Member member = memberService.getByEmail(email).toEntity();
                 forceAuthentication(member);
             }
         }

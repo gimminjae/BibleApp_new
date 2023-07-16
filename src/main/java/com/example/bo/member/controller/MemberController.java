@@ -1,5 +1,6 @@
 package com.example.bo.member.controller;
 
+import com.example.bo.base.exception.ValidationUtil;
 import com.example.bo.member.dto.MemberDto;
 import com.example.bo.member.entity.AuthUser;
 import jakarta.validation.Valid;
@@ -25,12 +26,6 @@ import java.util.Map;
 @RequestMapping("/api/members")
 public class MemberController {
     private final MemberService memberService;
-
-    @GetMapping("/confirmUsernameDuplication")
-    public ResponseEntity<Void> confirmUsernameDuplication(@RequestParam String username) {
-        memberService.confirmUsernameDuplication(username);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
     @GetMapping("/confirmNicknameDuplication")
     public ResponseEntity<Void> confirmNicknameDuplication(@RequestParam String nickname) {
         memberService.confirmNicknameDuplication(nickname);
@@ -48,19 +43,13 @@ public class MemberController {
     }
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@RequestBody @Valid MemberDto memberDto, BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            StringBuilder errorString = new StringBuilder();
-            for(ObjectError error : bindingResult.getAllErrors()) {
-                errorString.append("%s%s".formatted(error.getDefaultMessage(), "\n"));
-            }
-            throw new AccessDeniedException(errorString.toString());
-        }
+        ValidationUtil.returnValidError(bindingResult);
         memberService.signUp(memberDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(MemberDto memberDto, BindingResult bindingResult) {
+    public ResponseEntity<Map<String, String>> login(MemberDto memberDto) {
         Map<String, String> tokensInfo = memberService.login(memberDto);
         return new ResponseEntity<>(tokensInfo, HttpStatus.OK);
     }
@@ -82,13 +71,13 @@ public class MemberController {
 
     @PatchMapping("/email/{newEmail}")
     public ResponseEntity<Void> modifyEmail(@AuthenticationPrincipal AuthUser authUser, @PathVariable String newEmail) {
-        memberService.modifyEmail(memberService.getByUsername(authUser.getUsername()), newEmail);
+        memberService.modifyEmail(memberService.getByMemId(authUser.getMemId()), newEmail);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/nickname/{newNickname}")
     public ResponseEntity<Void> modifyNickname(@AuthenticationPrincipal AuthUser authUser, @PathVariable String newNickname) {
-        memberService.modifyNickname(memberService.getByUsername(authUser.getUsername()), newNickname);
+        memberService.modifyNickname(memberService.getByMemId(authUser.getMemId()), newNickname);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

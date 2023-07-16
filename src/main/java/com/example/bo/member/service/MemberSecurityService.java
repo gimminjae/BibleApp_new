@@ -24,10 +24,10 @@ public class MemberSecurityService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(username));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByEmail(email));
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        if("ADMIN".equals(username)) {
+        if("ADMIN".equals(member.getRole().getRole())) {
             authorityList.add(new SimpleGrantedAuthority(Role.ADMIN.getRole()));
         } else  {
             authorityList.add(new SimpleGrantedAuthority(Role.MEMBER.getRole()));

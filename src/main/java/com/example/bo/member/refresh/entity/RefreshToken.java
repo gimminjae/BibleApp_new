@@ -25,9 +25,9 @@ public class RefreshToken {
     @Indexed
     private String refreshToken;
 
-    public static RefreshToken from(String username, String refreshToken) {
+    public static RefreshToken from(String email, String refreshToken) {
         return RefreshToken.builder()
-                .id(username)
+                .id(email)
                 .createdDateTime(LocalDateTime.now())
                 .expiredDateTime(LocalDateTime.now().plusMonths(1))
                 .refreshToken(refreshToken)

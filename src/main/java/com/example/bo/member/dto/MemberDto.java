@@ -17,11 +17,6 @@ public class MemberDto {
     private String memId;
     private LocalDateTime createDateTime;
     private LocalDateTime updateDateTime;
-    @NotNull(message = "아이디를 입력하세요.")
-    @NotBlank(message = "아이디를 입력하세요.")
-    @Size(min = 5, max = 10, message = "아이디는 5 ~ 10자 이어야 합니다.")
-    @Pattern(regexp = "^[a-zA-Z0-0]*$", message = "아이디는 영어랑 숫자만 가능합니다.")
-    private String username;
 
     @NotNull(message = "비밀번호를 입력하세요.")
     @NotBlank(message = "비밀번호를 입력하세요.")
@@ -44,10 +39,17 @@ public class MemberDto {
     private String email;
     private String role;
 
-    public static MemberDto makeMemberDto(String username, String password, String nickname, String email) {
+    public static MemberDto makeMemberDto(String email, String nickname, String password) {
         return MemberDto.builder()
-                .username(username)
                 .password(password)
+                .nickname(nickname)
+                .email(email)
+                .build();
+    }
+    public static MemberDto makeMemberDto(String email, String nickname, String password, String password2) {
+        return MemberDto.builder()
+                .password(password)
+                .password2(password2)
                 .nickname(nickname)
                 .email(email)
                 .build();
@@ -60,7 +62,6 @@ public class MemberDto {
                 .updateDateTime(this.getUpdateDateTime())
                 .email(this.getEmail())
                 .nickname(this.getNickname())
-                .username(this.getUsername())
                 .password(this.getPassword())
                 .role(Role.valueOf(this.getRole()))
                 .build();

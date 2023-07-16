@@ -29,10 +29,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final static int ACCESS_TOKEN_MAXAGE = 60 * 30;
-    private final static String LOGIN_FAIL_MSG = "아이디 혹은 비밀번호를 확인하세요.";
+    private final static String LOGIN_FAIL_MSG = "이메일 혹은 비밀번호를 확인하세요.";
     private final static String NO_ACCESS_AUTH_MSG = "권한이 없습니다.";
     private final static String NICKNAME_DUPLICATION_MSG = "중복된 닉네임입니다.";
-    private final static String USERNAME_DUPLICATION_MSG = "중복된 아이디입니다.";
     private final static String COMMON_DUPLICATION_MSG = "중복된 요소가 있습니다.";
     private final static String EMAIL_DUPLICATION_MSG = "중복된 이메일입니다.";
     private final static String TWO_NEW_PASSWORD_NOT_CORRECT_MSG = "두 개의 새 비밀번호가 일치하지 않습니다.";
@@ -58,11 +57,6 @@ public class MemberServiceImpl implements MemberService {
         } catch(DataIntegrityViolationException e) {
             throw new IllegalArgumentException(COMMON_DUPLICATION_MSG);
         }
-    }
-
-    @Override
-    public MemberDto getByUsername(String username) {
-        return ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByUsername(username)).toDto();
     }
 
     @Override
@@ -120,7 +114,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Map<String, String> login(MemberDto memberDto) {
-        Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByUsername(memberDto.getUsername()), LOGIN_FAIL_MSG);
+        Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByEmail(memberDto.getEmail()), LOGIN_FAIL_MSG);
         if(!passwordEncoder.matches(memberDto.getPassword(), member.getPassword())) {
             throw new AccessDeniedException(LOGIN_FAIL_MSG);
         }
@@ -148,13 +142,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void confirmUsernameDuplication(String username) {
-        if (memberRepository.findByUsername(username).isPresent()) {
-            throw new DataIntegrityViolationException(USERNAME_DUPLICATION_MSG);
-        }
-    }
-
-    @Override
     public void confirmEmail(String email) {
         if (memberRepository.findByEmail(email).isPresent()) {
             throw new DataIntegrityViolationException(EMAIL_DUPLICATION_MSG);
@@ -177,6 +164,11 @@ public class MemberServiceImpl implements MemberService {
         if(!authCode.getCode().equals(code)) {
             throw new AccessDeniedException(NOT_CORRECT_AUTHCODE);
         }
+    }
+
+    @Override
+    public MemberDto getByEmail(String email) {
+        return ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByEmail(email)).toDto();
     }
 
     private String genAccessToken(Member member) {

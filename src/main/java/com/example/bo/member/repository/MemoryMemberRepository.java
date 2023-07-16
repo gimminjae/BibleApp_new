@@ -63,11 +63,6 @@ public class MemoryMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findByUsername(String username) {
-        return memberList.stream().filter(member -> member.getUsername().equals(username)).findFirst();
-    }
-
-    @Override
     public Optional<Member> findByEmail(String email) {
         return memberList.stream().filter(member -> member.getEmail().equals(email)).findFirst();
     }
