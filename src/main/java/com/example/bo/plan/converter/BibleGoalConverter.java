@@ -11,13 +11,11 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class BibleGoalConverter implements AttributeConverter<List<Bible>, String> {
     private static final String SPLIT_CHAR = ";";
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public String convertToDatabaseColumn(List<Bible> bibles) {
