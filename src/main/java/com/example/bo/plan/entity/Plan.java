@@ -1,15 +1,18 @@
 package com.example.bo.plan.entity;
 
-import com.example.bo.mapping.memplan.entity.MemberPlan;
+import com.example.bo.member.entity.Member;
 import com.example.bo.plan.converter.BibleGoalConverter;
 import com.example.bo.plan.dto.Bible;
+import com.example.bo.plan.dto.PlanDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -23,12 +26,28 @@ public class Plan {
     private String planId;
     private LocalDateTime createDateTime;
     private LocalDateTime updateDateTime;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String planName;
     private int goalPercent;
-    private int oldGoal;
-    private int newGoal;
+    private int oldGoalCount;
+    private int newGoalCount;
     @Convert(converter = BibleGoalConverter.class)
     private List<Bible> goalStatus;
-    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
-    private List<MemberPlan> member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
+    public static Plan from(PlanDto planDto) {
+        return Plan.builder()
+                .planId(null)
+                .createDateTime(LocalDateTime.now())
+                .startDate(LocalDate.parse(planDto.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .endDate(LocalDate.parse(planDto.getEndDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .planName(planDto.getPlanName())
+                .oldGoalCount(planDto.getOldGoalCount())
+                .newGoalCount(planDto.getNewGoalCount())
+                .goalStatus(planDto.getGoalStatus())
+                .member(planDto.getMember().toEntity())
+                .goalStatus(Bible.createAllList())
+                .build();
+    }
 }
