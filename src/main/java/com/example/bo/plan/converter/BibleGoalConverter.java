@@ -19,7 +19,13 @@ public class BibleGoalConverter implements AttributeConverter<List<Bible>, Strin
     @Override
     public String convertToDatabaseColumn(List<Bible> bibles) {
         if (bibles == null) return "";
-        return String.join(SPLIT_CHAR, bibles.stream().map(Object::toString).toList());
+        return String.join(SPLIT_CHAR, bibles.stream().map(data -> {
+            try {
+                return objectMapper.writeValueAsString(data);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }).toList());
     }
 
     @Override
@@ -28,7 +34,7 @@ public class BibleGoalConverter implements AttributeConverter<List<Bible>, Strin
         List<String> bibleStringList = Arrays.stream(bibles.split(SPLIT_CHAR)).toList();
         List<Bible> result = new ArrayList<>();
         try {
-            for(String s : bibleStringList) {
+            for (String s : bibleStringList) {
                 result.add(objectMapper.readValue(s, Bible.class));
             }
         } catch (JsonProcessingException e) {

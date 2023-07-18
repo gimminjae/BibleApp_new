@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class Bible {
     //true -> old / false -> new
     private boolean testament;
@@ -21,11 +22,14 @@ public class Bible {
     private List<Integer> verseStatus;
 
     public static Bible makeBibleByEnum(BibleInfoEnum bibleEnum) {
+        List<Integer> verseList = new ArrayList<>();
+        for(int i = 1; i <= bibleEnum.getChapter(); i++) verseList.add(0);
         return Bible.builder()
                 .testament(bibleEnum.getBookSeq() <= 39)
                 .bookName(bibleEnum.getBookName())
                 .book(bibleEnum.getBookSeq())
                 .chapter(bibleEnum.getChapter())
+                .verseStatus(verseList)
                 .build();
     }
     public static List<Bible> createAllList() {

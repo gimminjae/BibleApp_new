@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class PlanDto {
-    private String planId;
+    private long planId;
     private LocalDateTime createDateTime;
     private LocalDateTime updateDateTime;
     private String startDate;

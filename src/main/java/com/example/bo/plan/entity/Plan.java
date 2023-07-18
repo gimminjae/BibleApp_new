@@ -23,7 +23,8 @@ import java.util.List;
 @Table(name = "plan")
 public class Plan {
     @Id
-    private String planId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long planId;
     private LocalDateTime createDateTime;
     private LocalDateTime updateDateTime;
     private LocalDate startDate;
@@ -35,19 +36,34 @@ public class Plan {
     @Convert(converter = BibleGoalConverter.class)
     private List<Bible> goalStatus;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="memId")
     private Member member;
     public static Plan from(PlanDto planDto) {
+        List<Bible> bibleList = Bible.createAllList();
         return Plan.builder()
-                .planId(null)
                 .createDateTime(LocalDateTime.now())
-                .startDate(LocalDate.parse(planDto.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .endDate(LocalDate.parse(planDto.getEndDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .startDate(LocalDate.parse(planDto.getStartDate().split("T")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .endDate(LocalDate.parse(planDto.getEndDate().split("T")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .planName(planDto.getPlanName())
                 .oldGoalCount(planDto.getOldGoalCount())
                 .newGoalCount(planDto.getNewGoalCount())
                 .goalStatus(planDto.getGoalStatus())
                 .member(planDto.getMember().toEntity())
-                .goalStatus(Bible.createAllList())
+                .goalStatus(bibleList)
+                .build();
+    }
+    public static PlanDto toDto(Plan plan) {
+        return PlanDto.builder()
+                .planId(plan.getPlanId())
+                .planName(plan.getPlanName())
+                .oldGoalCount(plan.getOldGoalCount())
+                .newGoalCount(plan.getNewGoalCount())
+                .goalPercent(plan.getGoalPercent())
+                .goalStatus(plan.getGoalStatus())
+                .createDateTime(plan.getCreateDateTime())
+                .updateDateTime(plan.getUpdateDateTime())
+                .startDate(plan.getStartDate().toString())
+                .endDate(plan.getEndDate().toString())
                 .build();
     }
 }

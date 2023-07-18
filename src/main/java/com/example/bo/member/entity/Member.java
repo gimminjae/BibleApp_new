@@ -55,6 +55,10 @@ public class Member {
                 .build();
     }
 
+    public Member(String memId) {
+        this.memId = memId;
+    }
+
     public MemberDto toDto() {
         return MemberDto.builder()
                 .memId(this.getMemId())
