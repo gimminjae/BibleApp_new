@@ -4,6 +4,7 @@ import com.example.bo.member.entity.Member;
 import com.example.bo.plan.converter.BibleGoalConverter;
 import com.example.bo.plan.dto.Bible;
 import com.example.bo.plan.dto.PlanDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +26,9 @@ public class Plan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long planId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createDateTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime updateDateTime;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -36,7 +39,7 @@ public class Plan {
     @Convert(converter = BibleGoalConverter.class)
     private List<Bible> goalStatus;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="memId")
+    @JoinColumn(name="mem_id")
     private Member member;
     public static Plan from(PlanDto planDto) {
         List<Bible> bibleList = Bible.createAllList();
