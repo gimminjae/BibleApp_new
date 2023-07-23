@@ -33,4 +33,8 @@ public class PlanController {
     public ResponseEntity<List<PlanDto>> getMyBiblePlan(@AuthenticationPrincipal AuthUser authUser) {
         return new ResponseEntity<>(planService.getByMemId(authUser.getMemId()), HttpStatus.OK);
     }
+    @GetMapping("/{planId}")
+    public ResponseEntity<PlanDto> getPlanById(@AuthenticationPrincipal AuthUser authUser, @PathVariable long planId) {
+        return new ResponseEntity<>(planService.getByPlanIdAndConfirmByMemId(planId, authUser.getMemId()), HttpStatus.OK);
+    }
 }

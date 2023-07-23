@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@RequiredArgsConstructor
 public class BibleGoalConverter implements AttributeConverter<List<Bible>, String> {
     private static final String SPLIT_CHAR = ";";
     private final ObjectMapper objectMapper = new ObjectMapper();

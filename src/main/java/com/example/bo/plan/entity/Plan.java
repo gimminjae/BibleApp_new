@@ -4,7 +4,6 @@ import com.example.bo.member.entity.Member;
 import com.example.bo.plan.converter.BibleGoalConverter;
 import com.example.bo.plan.dto.Bible;
 import com.example.bo.plan.dto.PlanDto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -53,18 +52,18 @@ public class Plan {
                 .goalStatus(bibleList)
                 .build();
     }
-    public static PlanDto toDto(Plan plan) {
+    public PlanDto toDto() {
         return PlanDto.builder()
-                .planId(plan.getPlanId())
-                .planName(plan.getPlanName())
-                .oldGoalCount(plan.getOldGoalCount())
-                .newGoalCount(plan.getNewGoalCount())
-                .goalPercent(plan.getGoalPercent())
-                .goalStatus(plan.getGoalStatus())
-                .createDateTime(plan.getCreateDateTime())
-                .updateDateTime(plan.getUpdateDateTime())
-                .startDate(plan.getStartDate().toString())
-                .endDate(plan.getEndDate().toString())
+                .planId(this.getPlanId())
+                .planName(this.getPlanName())
+                .oldGoalCount(this.getOldGoalCount())
+                .newGoalCount(this.getNewGoalCount())
+                .goalPercent(this.getGoalPercent())
+                .goalStatus(this.getGoalStatus())
+                .createDateTime(this.getCreateDateTime())
+                .updateDateTime(this.getUpdateDateTime())
+                .startDate(this.getStartDate().toString())
+                .endDate(this.getEndDate().toString())
                 .build();
     }
 }

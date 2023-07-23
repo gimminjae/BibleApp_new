@@ -8,4 +8,7 @@ public interface PlanService {
     void create(PlanDto planDto);
 
     List<PlanDto> getByMemId(String memId);
+
+    PlanDto getByPlanIdAndConfirmByMemId(long planId, String memId);
+    PlanDto getByPlanId(long planId);
 }
