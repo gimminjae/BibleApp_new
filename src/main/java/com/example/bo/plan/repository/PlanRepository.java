@@ -14,5 +14,7 @@ public interface PlanRepository {
 
     Optional<Plan> findById(long planId);
 
+    void delete(Plan plan);
+
 //    List<Plan> findByMemId(String memId);
 }

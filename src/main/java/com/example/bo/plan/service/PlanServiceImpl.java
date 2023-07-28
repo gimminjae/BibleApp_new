@@ -49,4 +49,13 @@ public class PlanServiceImpl implements PlanService {
     public PlanDto getByPlanId(long planId) {
         return ObjectUtil.isNullExceptionElseReturnObJect(planRepository.findById(planId), NO_PLAN_MSG).toDto();
     }
+
+    @Override
+    public void deletePlanAfterConfirmMember(long planId, String memId) {
+        Plan plan = ObjectUtil.isNullExceptionElseReturnObJect(planRepository.findById(planId), NO_PLAN_MSG);
+        if (!plan.getMember().getMemId().equals(memId)) {
+            throw new AccessDeniedException(NO_ACCESS_AUTH_MSG);
+        }
+        planRepository.delete(plan);
+    }
 }

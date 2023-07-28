@@ -37,4 +37,9 @@ public class PlanController {
     public ResponseEntity<PlanDto> getPlanById(@AuthenticationPrincipal AuthUser authUser, @PathVariable long planId) {
         return new ResponseEntity<>(planService.getByPlanIdAndConfirmByMemId(planId, authUser.getMemId()), HttpStatus.OK);
     }
+    @DeleteMapping("/{planId}")
+    public ResponseEntity<Void> deletePlan(@AuthenticationPrincipal AuthUser authUser, @PathVariable long planId) {
+        planService.deletePlanAfterConfirmMember(planId, authUser.getMemId());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
