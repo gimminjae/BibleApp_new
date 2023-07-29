@@ -42,4 +42,11 @@ public class PlanController {
         planService.deletePlanAfterConfirmMember(planId, authUser.getMemId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @PatchMapping("/{planId}")
+    public ResponseEntity<Void> updatePlan(@AuthenticationPrincipal AuthUser authUser,
+                                           @PathVariable long planId,
+                                           @RequestBody PlanDto planDto) {
+        planService.updateVerseStatusAfterConfirmMember(planId, authUser.getMemId(), planDto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -13,4 +13,6 @@ public interface PlanService {
     PlanDto getByPlanId(long planId);
 
     void deletePlanAfterConfirmMember(long planId, String memId);
+
+    void updateVerseStatusAfterConfirmMember(long planId, String memId, PlanDto planDto);
 }

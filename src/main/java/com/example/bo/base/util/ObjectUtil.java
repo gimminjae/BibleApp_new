@@ -1,5 +1,6 @@
 package com.example.bo.base.util;
 
+import java.text.DecimalFormat;
 import java.util.Optional;
 import java.util.Random;
 
@@ -37,5 +38,14 @@ public class ObjectUtil {
             throw new NullPointerException(message);
         }
         return t;
+    }
+    public static String divide(float numerator, float denominator) {
+        if (denominator == 0) {
+            throw new IllegalArgumentException("Denominator cannot be zero.");
+        }
+
+        float result = numerator / denominator;
+        DecimalFormat decimalFormat = new DecimalFormat("#.####"); // Format to 4 decimal places
+        return decimalFormat.format(result);
     }
 }

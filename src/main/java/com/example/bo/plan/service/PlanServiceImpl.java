@@ -52,10 +52,20 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public void deletePlanAfterConfirmMember(long planId, String memId) {
+        planRepository.delete(returnMemberAfterConfirm(planId, memId));
+    }
+
+    @Override
+    public void updateVerseStatusAfterConfirmMember(long planId, String memId, PlanDto planDto) {
+        Plan plan = returnMemberAfterConfirm(planId, memId);
+        plan.updateVerseStatus(planDto.getGoalStatus());
+        planRepository.save(plan);
+    }
+    private Plan returnMemberAfterConfirm(long planId, String memId) {
         Plan plan = ObjectUtil.isNullExceptionElseReturnObJect(planRepository.findById(planId), NO_PLAN_MSG);
         if (!plan.getMember().getMemId().equals(memId)) {
             throw new AccessDeniedException(NO_ACCESS_AUTH_MSG);
         }
-        planRepository.delete(plan);
+        return plan;
     }
 }

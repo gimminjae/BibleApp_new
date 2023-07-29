@@ -1,5 +1,6 @@
 package com.example.bo.plan.entity;
 
+import com.example.bo.base.util.ObjectUtil;
 import com.example.bo.member.entity.Member;
 import com.example.bo.plan.converter.BibleGoalConverter;
 import com.example.bo.plan.dto.Bible;
@@ -30,9 +31,10 @@ public class Plan {
     private LocalDate startDate;
     private LocalDate endDate;
     private String planName;
-    private int goalPercent;
+    private float goalPercent;
     private int oldGoalCount;
     private int newGoalCount;
+
     @Convert(converter = BibleGoalConverter.class)
     private List<Bible> goalStatus;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -65,5 +67,32 @@ public class Plan {
                 .startDate(this.getStartDate().toString())
                 .endDate(this.getEndDate().toString())
                 .build();
+    }
+
+    public void updateVerseStatus(List<Bible> goalStatus) {
+        this.setGoalStatus(goalStatus);
+        float sum = 0;
+        for (Bible bible : goalStatus) {
+            int goalCount;
+            if (bible.isTestament()) goalCount = this.getOldGoalCount();
+            else goalCount = this.getNewGoalCount();
+            for (int readCount : bible.getVerseStatus()) {
+                sum += Math.min(readCount, goalCount);
+            }
+        }
+        int oldGoalTotalCount = 929;
+        int newGoalTotalCount = 260;
+        float totalVerseCount = (float) (oldGoalTotalCount * this.getOldGoalCount() + newGoalTotalCount * this.getNewGoalCount());
+        this.setGoalPercent(Float.parseFloat(ObjectUtil.divide(sum, totalVerseCount)) * Float.parseFloat("100"));
+        this.setUpdateDateTime(LocalDateTime.now());
+    }
+    public void setUpdateDateTime(LocalDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
+    }
+    public void setGoalPercent(float goalPercent) {
+        this.goalPercent = goalPercent;
+    }
+    public void setGoalStatus(List<Bible> goalStatus) {
+        this.goalStatus = goalStatus;
     }
 }

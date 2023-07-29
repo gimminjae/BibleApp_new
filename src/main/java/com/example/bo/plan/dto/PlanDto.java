@@ -22,7 +22,7 @@ public class PlanDto {
     private String startDate;
     private String endDate;
     private String planName;
-    private int goalPercent;
+    private float goalPercent;
     private int oldGoalCount;
     private int newGoalCount;
     private List<Bible> goalStatus;
