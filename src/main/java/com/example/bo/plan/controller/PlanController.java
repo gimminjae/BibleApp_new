@@ -49,4 +49,11 @@ public class PlanController {
         planService.updateVerseStatusAfterConfirmMember(planId, authUser.getMemId(), planDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @PutMapping("")
+    public ResponseEntity<Void> updatePlan(@AuthenticationPrincipal AuthUser authUser,
+                                           @RequestBody PlanDto planDto
+                                           ) {
+        planService.updatePlanInfoAfterConfirm(planDto, authUser.getMemId());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

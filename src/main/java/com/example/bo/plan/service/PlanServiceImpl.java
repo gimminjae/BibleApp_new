@@ -17,11 +17,16 @@ import java.util.Optional;
 public class PlanServiceImpl implements PlanService {
     private final static String NO_PLAN_MSG = "읽기표 정보가 존재하지 않습니다.";
     private final static String NO_ACCESS_AUTH_MSG = "권한이 없습니다.";
+    private final static String START_DATE_MUST_BEFORE_END_DATE_MSG = "시작일이 종료일보다 앞서야합니다.";
     private final PlanRepository planRepository;
 
     @Override
     public void create(PlanDto planDto) {
-        planRepository.save(Plan.from(planDto));
+        Plan plan = Plan.from(planDto);
+        if (!plan.getStartDate().isBefore(plan.getEndDate())) {
+            throw new IllegalArgumentException(START_DATE_MUST_BEFORE_END_DATE_MSG);
+        }
+        planRepository.save(plan);
     }
 
     @Override
@@ -61,6 +66,14 @@ public class PlanServiceImpl implements PlanService {
         plan.updateVerseStatus(planDto.getGoalStatus());
         planRepository.save(plan);
     }
+
+    @Override
+    public void updatePlanInfoAfterConfirm(PlanDto planDto, String memId) {
+        Plan plan = returnMemberAfterConfirm(planDto.getPlanId(), memId);
+        plan.updatePlanInfo(planDto);
+        planRepository.save(plan);
+    }
+
     private Plan returnMemberAfterConfirm(long planId, String memId) {
         Plan plan = ObjectUtil.isNullExceptionElseReturnObJect(planRepository.findById(planId), NO_PLAN_MSG);
         if (!plan.getMember().getMemId().equals(memId)) {

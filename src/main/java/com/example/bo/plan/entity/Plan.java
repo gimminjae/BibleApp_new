@@ -6,10 +6,7 @@ import com.example.bo.plan.converter.BibleGoalConverter;
 import com.example.bo.plan.dto.Bible;
 import com.example.bo.plan.dto.PlanDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,6 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -71,6 +69,10 @@ public class Plan {
 
     public void updateVerseStatus(List<Bible> goalStatus) {
         this.setGoalStatus(goalStatus);
+        this.operateGoalStatus(goalStatus);
+    }
+
+    private void operateGoalStatus(List<Bible> goalStatus) {
         float sum = 0;
         for (Bible bible : goalStatus) {
             int goalCount;
@@ -86,6 +88,7 @@ public class Plan {
         this.setGoalPercent(Float.parseFloat(ObjectUtil.divide(sum, totalVerseCount)) * Float.parseFloat("100"));
         this.setUpdateDateTime(LocalDateTime.now());
     }
+
     public void setUpdateDateTime(LocalDateTime updateDateTime) {
         this.updateDateTime = updateDateTime;
     }
@@ -94,5 +97,15 @@ public class Plan {
     }
     public void setGoalStatus(List<Bible> goalStatus) {
         this.goalStatus = goalStatus;
+    }
+
+    public void updatePlanInfo(PlanDto planDto) {
+        this.setPlanName(planDto.getPlanName());
+        this.setStartDate(LocalDate.parse(planDto.getStartDate().split("T")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        this.setEndDate(LocalDate.parse(planDto.getEndDate().split("T")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        this.setOldGoalCount(planDto.getOldGoalCount());
+        this.setNewGoalCount(planDto.getNewGoalCount());
+        this.setUpdateDateTime(planDto.getUpdateDateTime());
+        this.operateGoalStatus(this.getGoalStatus());
     }
 }
