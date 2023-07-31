@@ -1,6 +1,7 @@
 package com.example.bo.plan.entity;
 
 import com.example.bo.base.util.ObjectUtil;
+import com.example.bo.bibleverse.enums.BibleChapterInfo;
 import com.example.bo.member.entity.Member;
 import com.example.bo.plan.converter.BibleGoalConverter;
 import com.example.bo.plan.dto.Bible;
@@ -82,9 +83,7 @@ public class Plan {
                 sum += Math.min(readCount, goalCount);
             }
         }
-        int oldGoalTotalCount = 929;
-        int newGoalTotalCount = 260;
-        float totalVerseCount = (float) (oldGoalTotalCount * this.getOldGoalCount() + newGoalTotalCount * this.getNewGoalCount());
+        float totalVerseCount = (float) (BibleChapterInfo.OLD_BIBLE_COUNT * this.getOldGoalCount() + BibleChapterInfo.NEW_BIBLE_COUNT * this.getNewGoalCount());
         this.setGoalPercent(Float.parseFloat(ObjectUtil.divide(sum, totalVerseCount)) * Float.parseFloat("100"));
         this.setUpdateDateTime(LocalDateTime.now());
     }
