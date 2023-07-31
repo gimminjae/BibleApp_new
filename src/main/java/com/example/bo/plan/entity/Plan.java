@@ -12,6 +12,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Entity
@@ -33,24 +34,32 @@ public class Plan {
     private float goalPercent;
     private int oldGoalCount;
     private int newGoalCount;
-
     @Convert(converter = BibleGoalConverter.class)
     private List<Bible> goalStatus;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="mem_id")
     private Member member;
+    private int totalReadCount;
+    private int currentReadCount;
+    private float readCountPerDay;
     public static Plan from(PlanDto planDto) {
         List<Bible> bibleList = Bible.createAllList();
+        LocalDate startDate = LocalDate.parse(planDto.getStartDate().split("T")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endDate = LocalDate.parse(planDto.getEndDate().split("T")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        int totalReadCount = BibleChapterInfo.OLD_BIBLE_COUNT + BibleChapterInfo.NEW_BIBLE_COUNT;
         return Plan.builder()
                 .createDateTime(LocalDateTime.now())
-                .startDate(LocalDate.parse(planDto.getStartDate().split("T")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .endDate(LocalDate.parse(planDto.getEndDate().split("T")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .startDate(startDate)
+                .endDate(endDate)
                 .planName(planDto.getPlanName())
                 .oldGoalCount(planDto.getOldGoalCount())
                 .newGoalCount(planDto.getNewGoalCount())
                 .goalStatus(planDto.getGoalStatus())
                 .member(planDto.getMember().toEntity())
                 .goalStatus(bibleList)
+                .totalReadCount(totalReadCount)
+                .currentReadCount(0)
+                .readCountPerDay((float) totalReadCount / (float) ChronoUnit.DAYS.between(startDate, endDate))
                 .build();
     }
     public PlanDto toDto() {
