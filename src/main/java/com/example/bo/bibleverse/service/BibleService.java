@@ -11,6 +11,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BibleService {
+    private static final String EMPTY_RESULT = "성경을 찾을 수 없습니다.";
     private final BibleRepository bibleVerseRepository;
 
     public List<BibleVerseDto> getByBookAndChapter(BibleVerseDto bibleVerseDto) {
@@ -18,6 +19,10 @@ public class BibleService {
     }
 
     public List<BibleVerseDto> getByBookNameAndChapter(BibleVerseDto bibleVerseDto) {
-        return bibleVerseRepository.findByBookNameAndChapter(bibleVerseDto.getBookName(), bibleVerseDto.getChapter()).stream().map(BibleVerseEntity::toDto).toList();
+        List<BibleVerseDto> result = bibleVerseRepository.findByBookNameAndChapter(bibleVerseDto.getBookName(), bibleVerseDto.getChapter()).stream().map(BibleVerseEntity::toDto).toList();
+        if(result.isEmpty()) {
+            throw new NullPointerException(EMPTY_RESULT);
+        }
+        return result;
     }
 }
