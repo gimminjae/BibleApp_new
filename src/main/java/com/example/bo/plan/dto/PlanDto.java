@@ -27,4 +27,8 @@ public class PlanDto {
     private int newGoalCount;
     private List<Bible> goalStatus;
     private MemberDto member;
+    private int totalReadCount;
+    private int currentReadCount;
+    private float readCountPerDay;
+    private int restDay;
 }

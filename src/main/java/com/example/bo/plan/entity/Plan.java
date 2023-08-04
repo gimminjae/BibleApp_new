@@ -42,11 +42,12 @@ public class Plan {
     private int totalReadCount;
     private int currentReadCount;
     private float readCountPerDay;
+    private int restDay;
     public static Plan from(PlanDto planDto) {
         List<Bible> bibleList = Bible.createAllList();
         LocalDate startDate = LocalDate.parse(planDto.getStartDate().split("T")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalDate endDate = LocalDate.parse(planDto.getEndDate().split("T")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        int totalReadCount = BibleChapterInfo.OLD_BIBLE_COUNT + BibleChapterInfo.NEW_BIBLE_COUNT;
+        int totalReadCount = BibleChapterInfo.OLD_BIBLE_COUNT * planDto.getOldGoalCount() + BibleChapterInfo.NEW_BIBLE_COUNT * planDto.getNewGoalCount();
         return Plan.builder()
                 .createDateTime(LocalDateTime.now())
                 .startDate(startDate)
@@ -59,6 +60,7 @@ public class Plan {
                 .goalStatus(bibleList)
                 .totalReadCount(totalReadCount)
                 .currentReadCount(0)
+                .restDay((int) ChronoUnit.DAYS.between(startDate, endDate))
                 .readCountPerDay((float) totalReadCount / (float) ChronoUnit.DAYS.between(startDate, endDate))
                 .build();
     }
@@ -74,6 +76,10 @@ public class Plan {
                 .updateDateTime(this.getUpdateDateTime())
                 .startDate(this.getStartDate().toString())
                 .endDate(this.getEndDate().toString())
+                .totalReadCount(this.getTotalReadCount())
+                .currentReadCount(this.getCurrentReadCount())
+                .readCountPerDay(this.getReadCountPerDay())
+                .restDay(this.getRestDay())
                 .build();
     }
 
