@@ -8,6 +8,7 @@ import com.example.bo.plan.dto.Bible;
 import com.example.bo.plan.dto.PlanDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,8 +61,6 @@ public class Plan {
                 .goalStatus(bibleList)
                 .totalReadCount(totalReadCount)
                 .currentReadCount(0)
-                .restDay((int) ChronoUnit.DAYS.between(startDate, endDate))
-                .readCountPerDay((float) totalReadCount / (float) ChronoUnit.DAYS.between(startDate, endDate))
                 .build();
     }
     public PlanDto toDto() {
@@ -78,8 +77,8 @@ public class Plan {
                 .endDate(this.getEndDate().toString())
                 .totalReadCount(this.getTotalReadCount())
                 .currentReadCount(this.getCurrentReadCount())
-                .readCountPerDay(this.getReadCountPerDay())
-                .restDay(this.getRestDay())
+                .restDay((int) ChronoUnit.DAYS.between(LocalDate.now(), this.getEndDate()))
+                .readCountPerDay((float) (this.getTotalReadCount() - this.getCurrentReadCount()) / (float) ChronoUnit.DAYS.between(LocalDate.now(), this.getEndDate()))
                 .build();
     }
 
@@ -99,6 +98,7 @@ public class Plan {
             }
         }
         float totalVerseCount = (float) (BibleChapterInfo.OLD_BIBLE_COUNT * this.getOldGoalCount() + BibleChapterInfo.NEW_BIBLE_COUNT * this.getNewGoalCount());
+        this.setCurrentReadCount((int) sum);
         this.setGoalPercent(Float.parseFloat(ObjectUtil.divide(sum, totalVerseCount)) * Float.parseFloat("100"));
         this.setUpdateDateTime(LocalDateTime.now());
     }
@@ -121,5 +121,6 @@ public class Plan {
         this.setNewGoalCount(planDto.getNewGoalCount());
         this.setUpdateDateTime(planDto.getUpdateDateTime());
         this.operateGoalStatus(this.getGoalStatus());
+        this.setTotalReadCount((BibleChapterInfo.OLD_BIBLE_COUNT * planDto.getOldGoalCount() + BibleChapterInfo.NEW_BIBLE_COUNT * planDto.getNewGoalCount()));
     }
 }
