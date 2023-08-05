@@ -64,6 +64,8 @@ public class Plan {
                 .build();
     }
     public PlanDto toDto() {
+        float readCountPerDay = (float) (this.getTotalReadCount() - this.getCurrentReadCount()) / (float) ChronoUnit.DAYS.between(LocalDate.now(), this.getEndDate());
+        readCountPerDay = (int) (readCountPerDay * 100) / (float) 100;
         return PlanDto.builder()
                 .planId(this.getPlanId())
                 .planName(this.getPlanName())
@@ -78,7 +80,7 @@ public class Plan {
                 .totalReadCount(this.getTotalReadCount())
                 .currentReadCount(this.getCurrentReadCount())
                 .restDay((int) ChronoUnit.DAYS.between(LocalDate.now(), this.getEndDate()))
-                .readCountPerDay((float) (this.getTotalReadCount() - this.getCurrentReadCount()) / (float) ChronoUnit.DAYS.between(LocalDate.now(), this.getEndDate()))
+                .readCountPerDay(readCountPerDay)
                 .build();
     }
 
