@@ -175,8 +175,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void issueTemporaryPw(String email) {
         Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByEmail(email), NOT_FOUND_MEMBER);
-        member.changePassword(ObjectUtil.generateRandomString());
+        String newPassword = ObjectUtil.generateRandomString();
+        member.changePassword(passwordEncoder.encode(newPassword));
         memberRepository.save(member);
+        googleEmailService.sendEmail(MailTo.sendTemporaryPw(email, newPassword));
     }
 
     private String genAccessToken(Member member) {
