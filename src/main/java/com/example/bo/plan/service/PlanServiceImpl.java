@@ -71,6 +71,9 @@ public class PlanServiceImpl implements PlanService {
     public void updatePlanInfoAfterConfirm(PlanDto planDto, String memId) {
         Plan plan = returnMemberAfterConfirm(planDto.getPlanId(), memId);
         plan.updatePlanInfo(planDto);
+        if (!plan.getStartDate().isBefore(plan.getEndDate())) {
+            throw new IllegalArgumentException(START_DATE_MUST_BEFORE_END_DATE_MSG);
+        }
         planRepository.save(plan);
     }
 
