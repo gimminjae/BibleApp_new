@@ -26,7 +26,7 @@ public class Bible {
         for(int i = 1; i <= bibleEnum.getChapter(); i++) verseList.add(0);
         return Bible.builder()
                 .testament(bibleEnum.getBookSeq() <= 39)
-                .bookName(bibleEnum.getBookName())
+                .bookName(bibleEnum.getKorBookName())
                 .book(bibleEnum.getBookSeq())
                 .chapter(bibleEnum.getChapter())
                 .verseStatus(verseList)
