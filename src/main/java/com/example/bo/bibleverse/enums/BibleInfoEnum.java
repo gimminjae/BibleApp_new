@@ -74,13 +74,13 @@ public enum BibleInfoEnum {
     private final int bookSeq;
     private final String korBookName;
     private final String enBookName;
-    private final int chapter;
+    private final int totalChapter;
 
     BibleInfoEnum(int bookSeq, String korBookName, String enBookName, int chapter) {
         this.bookSeq = bookSeq;
         this.korBookName = korBookName;
         this.enBookName = enBookName;
-        this.chapter = chapter;
+        this.totalChapter = chapter;
     }
 
     // Getter methods...

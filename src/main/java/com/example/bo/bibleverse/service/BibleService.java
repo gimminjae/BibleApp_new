@@ -31,34 +31,30 @@ public class BibleService {
     }
 
     public List<BibleVerseDto> getByBookNameAndChapter(BibleVerseDto bibleVerseDto) {
-//        List<BibleVerseDto> result = bibleVerseRepository.findByBookNameAndChapter(bibleVerseDto.getBookName(), bibleVerseDto.getChapter()).stream().map(BibleVerseEntity::toDto).toList();
-        List<BibleVerseDto> result = new LinkedList<>();
-
-        BibleInfoEnum foundBible = null;
-        for (BibleInfoEnum bibleInfoEnum : BibleInfoEnum.values()) {
-            if (bibleInfoEnum.getKorBookName().equals(bibleVerseDto.getBookName())) {
-                foundBible = bibleInfoEnum;
-                break;
-            }
-        }
-        if(foundBible == null) {
-            throw new NullPointerException(EMPTY_RESULT);
-        }
-        // read bible content from resources
-        ClassPathResource resource = new ClassPathResource("bible/%s/%s.json".formatted(foundBible.getEnBookName().toLowerCase(), bibleVerseDto.getChapter()));
-        try {
-            Path path = Paths.get(resource.getURI());
-            String content = Files.readString(path);
-//            for (String strBible : content) {
-//                result.add(objectMapper.readValue(strBible, BibleVerseDto.class));
-//            }
-            result = objectMapper.readValue(content, List.class);
-        } catch (IOException e) {
-            throw new NullPointerException(EMPTY_RESULT);
-        }
+        BibleInfoEnum foundBible = getBibleInfoEnumByKorBookName(bibleVerseDto.getBookName());
+        List<BibleVerseDto> result = getBibleFromResourcesByBibleInfo(foundBible, bibleVerseDto.getChapter());
         if(result.isEmpty()) {
             throw new NullPointerException(EMPTY_RESULT);
         }
         return result;
+    }
+
+    private List<BibleVerseDto> getBibleFromResourcesByBibleInfo(BibleInfoEnum foundBible, int chapter) {
+        ClassPathResource resource = new ClassPathResource("bible/%s/%s.json".formatted(foundBible.getEnBookName().toLowerCase(), chapter));
+        try {
+            String content = Files.readString(Paths.get(resource.getURI()));
+            return objectMapper.readValue(content, List.class);
+        } catch (IOException e) {
+            throw new NullPointerException(EMPTY_RESULT);
+        }
+    }
+
+    private BibleInfoEnum getBibleInfoEnumByKorBookName(String bookName) {
+        for (BibleInfoEnum bibleInfoEnum : BibleInfoEnum.values()) {
+            if (bibleInfoEnum.getKorBookName().equals(bookName)) {
+                return bibleInfoEnum;
+            }
+        }
+        throw new NullPointerException(EMPTY_RESULT);
     }
 }

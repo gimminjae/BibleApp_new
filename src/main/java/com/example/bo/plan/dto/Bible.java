@@ -23,12 +23,12 @@ public class Bible {
 
     public static Bible makeBibleByEnum(BibleInfoEnum bibleEnum) {
         List<Integer> verseList = new ArrayList<>();
-        for(int i = 1; i <= bibleEnum.getChapter(); i++) verseList.add(0);
+        for(int i = 1; i <= bibleEnum.getTotalChapter(); i++) verseList.add(0);
         return Bible.builder()
                 .testament(bibleEnum.getBookSeq() <= 39)
                 .bookName(bibleEnum.getKorBookName())
                 .book(bibleEnum.getBookSeq())
-                .chapter(bibleEnum.getChapter())
+                .chapter(bibleEnum.getTotalChapter())
                 .verseStatus(verseList)
                 .build();
     }
