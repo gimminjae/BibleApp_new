@@ -12,6 +12,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
+/**
+ * 성경 내용 json 파일 만들 때만 사용하는 코드
+ */
 @SpringBootTest
 class BoApplicationTests {
     @Autowired
