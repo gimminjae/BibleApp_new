@@ -9,19 +9,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ObjectUtil {
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String CHARACTERS_ONLY_NUMBER = "0123456789";
     private static final int LENGTH = 8;
 
     public static String generateRandomString() {
-        StringBuilder sb = new StringBuilder(LENGTH);
-        Random random = new Random();
-
-        for (int i = 0; i < LENGTH; i++) {
-            int randomIndex = random.nextInt(CHARACTERS.length());
-            char randomChar = CHARACTERS.charAt(randomIndex);
-            sb.append(randomChar);
-        }
-
-        return sb.toString();
+        return generateRandomStringByInput(CHARACTERS);
     }
     public static <T> T isNullExceptionElseReturnObJect(Optional<T> optionalT) {
         T t = optionalT.orElse(null);
@@ -47,5 +39,21 @@ public class ObjectUtil {
         float result = numerator / denominator;
         DecimalFormat decimalFormat = new DecimalFormat("#.####"); // Format to 4 decimal places
         return decimalFormat.format(result);
+    }
+
+    public static String generateRandomStringOnlyNumber() {
+        return generateRandomStringByInput(CHARACTERS_ONLY_NUMBER);
+    }
+    private static String generateRandomStringByInput(String stringType) {
+        StringBuilder sb = new StringBuilder(LENGTH);
+        Random random = new Random();
+
+        for (int i = 0; i < LENGTH; i++) {
+            int randomIndex = random.nextInt(stringType.length());
+            char randomChar = stringType.charAt(randomIndex);
+            sb.append(randomChar);
+        }
+
+        return sb.toString();
     }
 }

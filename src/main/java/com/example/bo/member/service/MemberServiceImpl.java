@@ -147,7 +147,7 @@ public class MemberServiceImpl implements MemberService {
         if (memberRepository.findByEmail(email).isPresent()) {
             throw new DataIntegrityViolationException(EMAIL_DUPLICATION_MSG);
         }
-        String authCode = ObjectUtil.generateRandomString();
+        String authCode = ObjectUtil.generateRandomStringOnlyNumber();
         googleEmailService.sendEmail(MailTo.sendEmailAuthCode(authCode, email));
         authCodeRedisRepository.save(AuthCode.from(authCode, email));
     }
