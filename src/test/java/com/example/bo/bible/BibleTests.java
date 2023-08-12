@@ -13,15 +13,15 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class BibleTests {
-    @Test
-    void t1() throws IOException {
-        ClassPathResource resource = new ClassPathResource("/genesis/1.json");
-        try {
-            Path path = Paths.get(resource.getURI());
-            List<String> content = Files.readAllLines(path);
-            content.forEach(System.out::println);
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-    }
+//    @Test
+//    void t1() throws IOException {
+//        ClassPathResource resource = new ClassPathResource("/genesis/1.json");
+//        try {
+//            Path path = Paths.get(resource.getURI());
+//            List<String> content = Files.readAllLines(path);
+//            content.forEach(System.out::println);
+//        } catch (IOException e) {
+//            System.out.println(e);
+//        }
+//    }
 }
