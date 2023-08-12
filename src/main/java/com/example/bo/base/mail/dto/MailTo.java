@@ -19,4 +19,11 @@ public class MailTo {
                 .address(email)
                 .build();
     }
+    public static MailTo sendTemporaryPw(String email, String password) {
+        return MailTo.builder()
+                .title("Forgot Password: 비밀번호 변경")
+                .message("변경된 비밀번호는 %s 입니다.".formatted(password))
+                .address(email)
+                .build();
+    }
 }

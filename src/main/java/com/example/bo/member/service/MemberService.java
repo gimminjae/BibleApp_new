@@ -36,4 +36,6 @@ public interface MemberService {
     void confirmEmailCode(String email, String authCode);
 
     MemberDto getByEmail(String email);
+
+    void issueTemporaryPw(String email);
 }

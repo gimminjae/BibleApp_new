@@ -6,6 +6,7 @@ import java.util.*;
 
 import com.example.bo.member.dto.MemberDto;
 
+import com.example.bo.plan.entity.Plan;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,6 +40,9 @@ public class Member {
     @Column(unique = true)
     private String email;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Plan> plan;
+
     public static Member from(MemberDto memberDto) {
         return Member.builder()
                 .memId("%s-%s".formatted(LocalDate.now().toString().replace("-", ""), UUID.randomUUID().toString().replace("-", "")))
@@ -49,6 +53,10 @@ public class Member {
                 .role(memberDto.getRole() != null && memberDto.getRole().equals("ADMIN") ? Role.ADMIN : Role.MEMBER)
                 .email(memberDto.getEmail())
                 .build();
+    }
+
+    public Member(String memId) {
+        this.memId = memId;
     }
 
     public MemberDto toDto() {

@@ -113,4 +113,9 @@ public class MemberController {
         memberService.deleteMember(memberService.getByMemId(memId));
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @PostMapping("/lost-password/{email}")
+    public ResponseEntity<Void> lostPassword(@AuthenticationPrincipal AuthUser authUser, @PathVariable String email) {
+        memberService.issueTemporaryPw(email);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -38,6 +38,7 @@ public class MemberServiceImpl implements MemberService {
     private final static String INVALID_REQUEST_MSG = "유효하지 않은 요청입니다.";
     private final static String EXPIRE_RELOGIN_MSG = "기간 만료 : 재로그인해주세요.";
     private final static String NOT_CORRECT_AUTHCODE = "인증코드가 올바르지 않습니다.";
+    private final static String NOT_FOUND_MEMBER = "회원정보를 찾을 수 없습니다.";
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
     private final AuthCodeRedisRepository authCodeRedisRepository;
     private final JwtProvider jwtProvider;
@@ -146,7 +147,7 @@ public class MemberServiceImpl implements MemberService {
         if (memberRepository.findByEmail(email).isPresent()) {
             throw new DataIntegrityViolationException(EMAIL_DUPLICATION_MSG);
         }
-        String authCode = ObjectUtil.generateRandomString();
+        String authCode = ObjectUtil.generateRandomStringOnlyNumber();
         googleEmailService.sendEmail(MailTo.sendEmailAuthCode(authCode, email));
         authCodeRedisRepository.save(AuthCode.from(authCode, email));
     }
@@ -169,6 +170,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDto getByEmail(String email) {
         return ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByEmail(email)).toDto();
+    }
+
+    @Override
+    public void issueTemporaryPw(String email) {
+        Member member = ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findByEmail(email), NOT_FOUND_MEMBER);
+        String newPassword = ObjectUtil.generateRandomString();
+        member.changePassword(passwordEncoder.encode(newPassword));
+        memberRepository.save(member);
+        googleEmailService.sendEmail(MailTo.sendTemporaryPw(email, newPassword));
     }
 
     private String genAccessToken(Member member) {
