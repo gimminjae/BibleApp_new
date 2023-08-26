@@ -4,7 +4,39 @@ spring:
       enabled: true
     restart:
       enabled: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: forspringstudy@gmail.com
+    password: juphwhduinewinii
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+  custom:
+    secretKey: secretkeysecretkeysecretkeysecretkeysecretkeysecretkey
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/examdb?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
+    username: root
+    password: min29525866
   jpa:
     properties:
       hibernate:
         show_sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: update # not create or create-drop!!!!
+# mapping DB table's column name and DTO's name
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
