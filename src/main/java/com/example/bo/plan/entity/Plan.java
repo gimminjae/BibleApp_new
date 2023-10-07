@@ -36,6 +36,7 @@ public class Plan {
     private int oldGoalCount;
     private int newGoalCount;
     @Convert(converter = BibleGoalConverter.class)
+    @Column(columnDefinition = "TEXT")
     private List<Bible> goalStatus;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="mem_id")
