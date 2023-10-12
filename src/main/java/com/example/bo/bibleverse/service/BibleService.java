@@ -27,7 +27,8 @@ public class BibleService {
     private final ObjectMapper objectMapper;
 
     public List<BibleVerseDto> getByBookAndChapter(BibleVerseDto bibleVerseDto) {
-        return bibleVerseRepository.findByBookAndChapter(bibleVerseDto.getBook(), bibleVerseDto.getChapter()).stream().map(BibleVerseEntity::toDto).toList();
+        BibleInfoEnum foundBible = getBibleInfoEnumByBookSeq(bibleVerseDto.getBook());
+        return getBibleFromResourcesByBibleInfo(foundBible, bibleVerseDto.getChapter());
     }
 
     public List<BibleVerseDto> getByBookNameAndChapter(BibleVerseDto bibleVerseDto) {
@@ -52,6 +53,14 @@ public class BibleService {
     private BibleInfoEnum getBibleInfoEnumByKorBookName(String bookName) {
         for (BibleInfoEnum bibleInfoEnum : BibleInfoEnum.values()) {
             if (bibleInfoEnum.getKorBookName().equals(bookName)) {
+                return bibleInfoEnum;
+            }
+        }
+        throw new NullPointerException(EMPTY_RESULT);
+    }
+    private BibleInfoEnum getBibleInfoEnumByBookSeq(int bookSeq) {
+        for (BibleInfoEnum bibleInfoEnum : BibleInfoEnum.values()) {
+            if (bibleInfoEnum.getBookSeq() == bookSeq) {
                 return bibleInfoEnum;
             }
         }

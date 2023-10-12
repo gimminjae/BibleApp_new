@@ -22,17 +22,9 @@ public class BibleController {
         List<BibleVerseDto> result = bibleVerseService.getByBookNameAndChapter(bibleVerseDto);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-    @GetMapping("/select")
-    public ResponseEntity<List<BibleVerseDto>> getBibleVerseType2(@ModelAttribute BibleVerseDto bibleVerseDto) {
+    @GetMapping("")
+    public ResponseEntity<List<BibleVerseDto>> getBibleVerse(@ModelAttribute BibleVerseDto bibleVerseDto) {
         List<BibleVerseDto> result = bibleVerseService.getByBookAndChapter(bibleVerseDto);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-    @GetMapping("/inputString")
-    public ResponseEntity<List<BibleVerseDto>> getBibleVerseType3(@RequestParam String bibleSearchString) {
-        BibleVerseDto bibleVerseDto = BibleVerseDto.fromString(bibleSearchString);
-
-        List<BibleVerseDto> result = bibleVerseService.getByBookNameAndChapter(bibleVerseDto);
-        
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
