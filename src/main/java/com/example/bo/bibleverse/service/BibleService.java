@@ -28,6 +28,7 @@ public class BibleService {
 
     public List<BibleVerseDto> getByBookAndChapter(BibleVerseDto bibleVerseDto) {
         BibleInfoEnum foundBible = getBibleInfoEnumByBookSeq(bibleVerseDto.getBook());
+        System.out.println("getByBookAndChapter");
         return getBibleFromResourcesByBibleInfo(foundBible, bibleVerseDto.getChapter());
     }
 
@@ -41,6 +42,7 @@ public class BibleService {
     }
 
     private List<BibleVerseDto> getBibleFromResourcesByBibleInfo(BibleInfoEnum foundBible, int chapter) {
+        System.out.println("getBibleFormResourcesByBibleInfo");
         ClassPathResource resource = new ClassPathResource("bible/%s/%s.json".formatted(foundBible.getEnBookName().toLowerCase(), chapter));
         try {
             String content = Files.readString(Paths.get(resource.getURI()));
