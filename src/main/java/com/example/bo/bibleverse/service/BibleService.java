@@ -45,7 +45,7 @@ public class BibleService {
         ClassPathResource resource = new ClassPathResource("bible/%s/%s.json".formatted(foundBible.getEnBookName().toLowerCase(), chapter));
         try {
 //            String content = Files.readString(Paths.get(resource.getURI()));
-            String content = Files.readString(Paths.get("bible/%s/%s.json".formatted(foundBible.getEnBookName().toLowerCase(), chapter)));
+            String content = Files.readString(Paths.get("/var/local/bible/%s/%s.json".formatted(foundBible.getEnBookName().toLowerCase(), chapter)));
             return objectMapper.readValue(content, List.class);
         } catch (IOException e) {
             throw new NullPointerException(EMPTY_RESULT);
