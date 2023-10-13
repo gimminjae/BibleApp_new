@@ -24,7 +24,6 @@ public class BibleController {
     }
     @GetMapping("")
     public ResponseEntity<List<BibleVerseDto>> getBibleVerse(@ModelAttribute BibleVerseDto bibleVerseDto) {
-        System.out.println("receive request");
         List<BibleVerseDto> result = bibleVerseService.getByBookAndChapter(bibleVerseDto);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

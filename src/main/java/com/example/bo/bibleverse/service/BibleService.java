@@ -28,7 +28,6 @@ public class BibleService {
 
     public List<BibleVerseDto> getByBookAndChapter(BibleVerseDto bibleVerseDto) {
         BibleInfoEnum foundBible = getBibleInfoEnumByBookSeq(bibleVerseDto.getBook());
-        System.out.println("getByBookAndChapter");
         return getBibleFromResourcesByBibleInfo(foundBible, bibleVerseDto.getChapter());
     }
 
