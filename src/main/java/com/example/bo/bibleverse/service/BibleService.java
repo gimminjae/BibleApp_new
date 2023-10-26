@@ -1,30 +1,25 @@
 package com.example.bo.bibleverse.service;
 
 import com.example.bo.bibleverse.dto.BibleVerseDto;
-import com.example.bo.bibleverse.entity.BibleVerseEntity;
 import com.example.bo.bibleverse.enums.BibleInfoEnum;
-import com.example.bo.bibleverse.repository.BibleRepository;
-import com.example.bo.plan.dto.Bible;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class BibleService {
     private static final String EMPTY_RESULT = "성경을 찾을 수 없습니다.";
-    private final BibleRepository bibleVerseRepository;
     private final ObjectMapper objectMapper;
+    @Value("${spring.profiles.active}")
+    private String runType;
 
     public List<BibleVerseDto> getByBookAndChapter(BibleVerseDto bibleVerseDto) {
         BibleInfoEnum foundBible = getBibleInfoEnumByBookSeq(bibleVerseDto.getBook());
