@@ -193,7 +193,7 @@ public class MemberServiceImpl implements MemberService {
 
         try {
             RefreshToken refreshToken = ObjectUtil.isNullExceptionElseReturnObJect(refreshTokenRedisRepository.findById(member.getMemId()));
-            refreshToken.update(LocalDateTime.now().plusMonths(1), sb.toString());
+            refreshToken.update(sb.toString());
             refreshTokenRedisRepository.save(refreshToken);
         } catch (NullPointerException e) {
             return refreshTokenRedisRepository.save(RefreshToken.from(member.getMemId(), sb.toString())).getRefreshToken();
@@ -201,20 +201,15 @@ public class MemberServiceImpl implements MemberService {
         return sb.toString();
     }
 
-    private String regenAccessTokenWithRefreshToken(String refreshTokenString) {
+    private String regenAccessTokenWithRefreshToken(String inputRefreshToken) {
         RefreshToken refreshToken;
-        refreshToken = refreshTokenRedisRepository.findByRefreshToken(refreshTokenString);
-        if(refreshToken == null) throw new NullPointerException(INVALID_REQUEST_MSG);
+        refreshToken = ObjectUtil.isNullExceptionElseReturnObJect(refreshTokenRedisRepository.findByRefreshToken(inputRefreshToken), INVALID_REQUEST_MSG);
 
-        if(LocalDateTime.now().isAfter(refreshToken.getExpiredDateTime())) {
-            throw new AccessDeniedException(EXPIRE_RELOGIN_MSG);
-        }
         return genAccessToken(ObjectUtil.isNullExceptionElseReturnObJect(memberRepository.findById(refreshToken.getId())));
     }
 
     private void deleteRefreshToken(String memId) {
-        RefreshToken refreshToken = ObjectUtil.isNullExceptionElseReturnObJect(refreshTokenRedisRepository.findById(memId));
-        refreshTokenRedisRepository.delete(refreshToken);
+        refreshTokenRedisRepository.deleteById(memId);
     }
 
 }
