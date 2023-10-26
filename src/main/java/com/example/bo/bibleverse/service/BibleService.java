@@ -38,8 +38,12 @@ public class BibleService {
     private List<BibleVerseDto> getBibleFromResourcesByBibleInfo(BibleInfoEnum foundBible, int chapter) {
         ClassPathResource resource = new ClassPathResource("bible/%s/%s.json".formatted(foundBible.getEnBookName().toLowerCase(), chapter));
         try {
-//            String content = Files.readString(Paths.get(resource.getURI()));
-            String content = Files.readString(Paths.get("/var/local/bible/%s/%s.json".formatted(foundBible.getEnBookName().toLowerCase(), chapter)));
+            String content;
+            if(runType.equals("local")) {
+                content = Files.readString(Paths.get(resource.getURI()));
+            } else {
+                content = Files.readString(Paths.get("/var/local/bible/%s/%s.json".formatted(foundBible.getEnBookName().toLowerCase(), chapter)));
+            }
             return objectMapper.readValue(content, List.class);
         } catch (IOException e) {
             throw new NullPointerException(EMPTY_RESULT);
