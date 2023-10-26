@@ -1,7 +1,6 @@
 package com.example.bo;
 
 import com.example.bo.bibleverse.enums.BibleInfoEnum;
-import com.example.bo.bibleverse.repository.BibleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,6 @@ import java.nio.file.StandardOpenOption;
  */
 @SpringBootTest
 class BoApplicationTests {
-    @Autowired
-    BibleRepository bibleRepository;
 
 //    @Test
 //    void contextLoads() {
