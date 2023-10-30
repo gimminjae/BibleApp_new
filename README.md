@@ -1,8 +1,10 @@
 # MY BIBLE
 성경 앱
 - 성경읽기 기능 및 성경읽기표 기능이 포함된 성경 앱입니다.
-
-# Stack
+## Code
+- front : https://github.com/gimminjae/fo-bible-service
+- back : https://github.com/gimminjae/bible-service
+## Stack
 <div align=center>
   <img src="https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D">
   <img src="https://img.shields.io/badge/Nuxt.js-white?style=for-the-badge&logo=nuxtdotjs&logoColor=4FC08D">
@@ -21,9 +23,9 @@
   <img src="https://shields.io/badge/AWS-orange?logo=amazon&style=for-the-badge&logoColor=white">
 </div>
 
-# ERD
+## ERD
 - [ERD cloud Url](https://www.erdcloud.com/d/2JBYtp63jQhJfr3gj)
 ![스크린샷 2023-10-30 093213](https://github.com/gimminjae/bible-service/assets/97084128/38d6c9f6-b1bf-46b4-81ff-6c08f8cfff7a)
 
-# 인프라 구조도
+## 인프라 구조도
 <img width="967" alt="스크린샷 2023-10-29 오후 10 05 26" src="https://github.com/gimminjae/bible-service/assets/97084128/28b72b83-4b01-4377-9a93-02264c9b30ec">
